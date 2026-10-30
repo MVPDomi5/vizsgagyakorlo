@@ -167,6 +167,13 @@ figure.fig.sticky img{max-height:36vh}
 .tbl th{text-align:left;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:6px 6px;border-bottom:1px solid var(--line)}
 .tbl td{padding:8px 6px;border-bottom:1px solid var(--line)}
 .sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.nowplay{gap:10px}
+.lbody{font-size:19px;line-height:1.5;min-height:3.2em}
+.seclist{display:grid;gap:6px}
+.secrow{display:flex;gap:10px;align-items:baseline;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px;font-size:15.5px}
+.secrow .num{color:var(--muted);font-size:12px;min-width:18px}
+.secrow.on{border-color:var(--acc);background:var(--acc-soft);font-weight:700}
+details.panel summary{list-style-position:inside}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -758,6 +765,152 @@ S('elet','Melyik hőmérő forgalmazása szűnt meg, mert mérgező anyagot tart
 MA('elet','Párosítsa a hőmérőt a jellemzőjével!',[['digitális hőmérő','a leggyakoribb: gyors, biztonságos, hangjelzéssel'],['dobhártya-hőmérő','infravörös érzékelés; gyors, de helyes technikát kíván'],['folyadékkristályos hőmérő','homlokra helyezett csík – tájékoztató érték'],['gallium üveghőmérő','a higanyos hőmérő biztonságos utódja; lassabb, de pontos']],4,'Minden hőmérőt használat előtt és után fertőtlenítünk; a rectalisat elkülönítve, jelöléssel tároljuk.'),
 );
 
+// ---------- HALLGATÁS: felolvasható tananyag ----------
+const LESSONS=[
+{id:'ana-ker',subj:'ana',tp:'ker',title:'Keringési rendszer és a vér',sections:[
+ {t:'A keringés alapjai',p:'Az ember vérkeringése zárt: a vér végig erekben áramlik. A szív a keringés motorja, az erek a szállítóvezetékek. Hogy egy ér artéria vagy véna, azt nem az oxigéntartalom, hanem az áramlás iránya dönti el. Az artéria, más néven verőér, a szívtől elvezető ér. A véna, más néven gyűjtőér, a szív felé szállítja a vért. Ezért lehet, hogy a tüdőverőér artéria, mégis oxigénszegény vért szállít, a tüdővisszerek pedig vénák, mégis oxigéndús vért visznek. Az anyagcsere a vér és a szövetek között a hajszálerekben, vagyis a kapillárisokban zajlik.'},
+ {t:'A szív üregei',p:'A szívnek négy ürege van: két pitvar és két kamra. A két kamrát a kamrai sövény választja el. A jobb pitvarba ömlik a felső és az alsó fővisszér, ezek hozzák vissza a szervezetből az oxigénszegény vért. A jobb kamrából indul a tüdőverőér, a kisvérkör kezdete. A bal pitvarba ömlik a négy tüdővisszér, ezek oxigéndús vért hoznak a tüdőből. A bal kamrából indul a főverőér, vagyis az aorta, a nagyvérkör kezdete. A bal kamra fala a legvastagabb, mert a nagyvérkör nagy ellenállásával szemben kell dolgoznia.'},
+ {t:'A szívbillentyűk',p:'A billentyűk biztosítják, hogy a vér csak egy irányba áramoljon. Két típusuk van: vitorlás és zsebes billentyűk. A vitorlás billentyűk a pitvarok és a kamrák között vannak. A jobb szívfélben a háromhegyű, a bal szívfélben a kéthegyű, más néven mitrális billentyű található. Jegyezd meg: háromhegyű jobbra, kéthegyű balra. A zsebes, más néven félhold alakú billentyűk a kamrák és a belőlük induló nagy erek között vannak: ez az aortabillentyű és a tüdőverőér-billentyű. Az első szívhang a vitorlás billentyűk, a második szívhang a zsebes billentyűk záródásakor keletkezik.'},
+ {t:'A vér útja a szívben',p:'Kövessük a vér útját a jobb szívfélben! A fővisszereken át a vér a jobb pitvarba érkezik, majd a háromhegyű billentyűn át a jobb kamrába jut. Innen a tüdőverőér-billentyűn át a tüdőverőérbe kerül. A bal szívfélben: a tüdővisszereken át a vér a bal pitvarba érkezik, a kéthegyű billentyűn át a bal kamrába jut, majd az aortabillentyűn át az aortába kerül.'},
+ {t:'A szívfal rétegei',p:'A szívfal rétegei belülről kifelé: a szívbelhártya, latinul endocardium; a szívizomzat, latinul myocardium; és a szívburok zsigeri lemeze, latinul epicardium. A szívet kívülről a szívburok, vagyis a pericardium veszi körül.'},
+ {t:'Az ingerképző és ingerületvezető rendszer',p:'A szív elsődleges ingerképző központja a sinuscsomó, más néven Keith–Flack-csomó. A jobb pitvar falában található, a felső fővisszér beömlésénél. Az ingerület útja: sinuscsomó, majd AV-csomó, más néven Aschoff–Tawara-csomó, majd His-köteg, majd Tawara-szárak, végül Purkinje-rostok. Mondd el még egyszer magadban: sinuscsomó, AV-csomó, His-köteg, Tawara-szárak, Purkinje-rostok. Az ingerület a pitvarokból indul, az AV-csomó késlelteti, ezért a pitvarok előbb húzódnak össze, mint a kamrák.'},
+ {t:'Szívciklus és szívteljesítmény',p:'A szisztolé a szívizom összehúzódása, ekkor lökődik ki a vér. A diasztolé a szívizom elernyedése, ekkor telődnek a kamrák. A koszorúerek is diasztoléban telődnek. A verőtérfogat az a vérmennyiség, amelyet egy kamra egyetlen összehúzódással kilök: kb. 70 milliliter. A perctérfogat az egy perc alatt kilökött vérmennyiség: kb. 5 liter. A perctérfogat egyenlő a verőtérfogat és a szívfrekvencia szorzatával. Ha a szívfrekvencia tartósan 180 felett van percenként, lerövidül a diasztolé, a kamrák nem telődnek fel rendesen, csökken a perctérfogat, esik a vérnyomás, és romlik a szívizom vérellátása is.'},
+ {t:'A kis- és a nagyvérkör',p:'A kisvérkör a jobb kamrából indul. A tüdőverőér a tüdőbe viszi a vért, ott történik a gázcsere: a vér oxigént vesz fel és szén-dioxidot ad le. A tüdővisszerek a bal pitvarba hozzák vissza a vért. A nagyvérkör a bal kamrából indul. Az aorta szállítja a vért a szervekhez, a vér a felső és az alsó fővisszéren át a jobb pitvarba tér vissza. A nagy erek latin nevei: aorta, a tüdőverőér-törzs truncus pulmonalis, a felső fővisszér vena cava superior, az alsó fővisszér vena cava inferior, a tüdővisszerek venae pulmonales.'},
+ {t:'Az aortaív ágai és a koszorúerek',p:'Az aortaívnek három közvetlen ága van. Az első a fejhez-karhoz vezető törzs, latinul truncus brachiocephalicus: ez látja el a jobb kart és a fej jobb felét, mert a jobb kulcscsont alatti verőérre és a jobb közös fejverőérre oszlik. A második a bal közös fejverőér, a harmadik a bal kulcscsont alatti verőér. A két koszorúér az aorta kezdeti szakaszából ered, közvetlenül az aortabillentyű felett. A hasi aorta a negyedik ágyékcsigolya magasságában ágazik ketté a két közös csípőverőérre. A külső fejverőér az arc és a koponya lágyrészeit látja el. Újraélesztéskor felnőttnél a nyaki verőéren tapintjuk a pulzust. A kapuvéna a bélből felszívódott anyagokat a májba szállítja.'},
+ {t:'Az értípusok összehasonlítása',p:'Az artériák a szívtől elfelé szállítanak, faluk vastag, izmos és rugalmas, bennük nagy a nyomás, kb. 100–120 higanymilliméter, az áramlás lüktető és gyors, billentyű nincs. A kapillárisok a verőerek és a gyűjtőerek között vannak, faluk egyetlen sejtrétegből és alaphártyából áll, az áramlás nagyon lassú, kb. fél milliméter másodpercenként, feladatuk az anyagcsere. A vénák a szív felé szállítanak, faluk vékonyabb és tágulékony, a nyomás kicsi, 5–15 higanymilliméter, az áramlás egyenletes, és zsebszerű billentyűik vannak. A vénák vértároló szerepűek: a szervezet vérmennyiségének 65–70 százaléka bennük található.'},
+ {t:'A vénás visszaáramlás',p:'Hogyan jut vissza a vér a lábból a szívbe? Több tényező segíti. Egy: a vénás billentyűk, amelyek csak a szív felé engedik a vért. Kettő: az izompumpa, vagyis a vázizmok összenyomják a mélyvénákat. Három: a légzési pumpa, mert belégzéskor negatív nyomás alakul ki a mellüregben. Négy: a mellettük futó artériák lüktetése. Öt: a szív szívóhatása diasztoléban.'},
+ {t:'A nyirokrendszer',p:'A nyirokrendszer három fő feladata: visszavezeti a szövetközti folyadékot a vérbe, részt vesz az immunvédekezésben, és szállítja a bélből felszívódott zsírokat. A legnagyobb nyirokszervünk a lép. A nyirok végül a kulcscsont alatti vénákba ömlik, a mellvezetéken és a jobb nyirokvezetéken keresztül. A máj nem nyirokszerv.'},
+ {t:'A vér általános jellemzői',p:'A vér folyékony kötőszövet. Vegyhatása enyhén lúgos, pH-ja 7,35 és 7,45 között van. Alvadási ideje kb. 5–10 perc. Egy felnőtt vérmennyisége kb. 5–5,5 liter, ez a testtömeg 7–8 százaléka. A vér két fő része a vérplazma, kb. 55 százalék, és az alakos elemek, kb. 45 százalék. Az alakos elemek térfogatszázalékos arányát hematokritnak nevezzük.'},
+ {t:'A plazmafehérjék',p:'A három fő plazmafehérje az albumin, a globulin és a fibrinogén. Az albumin tartja a vizet az érpályában, ezt onkotikus vagy kolloidozmotikus nyomásnak hívjuk. Ha a máj nem termel elég albumint, csökken ez a nyomás, a hajszálerekben kevesebb folyadék szívódik vissza, és a folyadék a szövetekben marad: ödéma alakul ki. A fibrinogén a véralvadásban vesz részt. Ha a fibrinogént kivonjuk a plazmából, a maradék folyadék neve vérsavó, vagyis szérum. A hemoglobin nem plazmafehérje, hanem a vörösvértestben található.'},
+ {t:'A vörösvértest',p:'A vörösvértest latin neve erythrocyta. Alakja mindkét oldalán behorpadt korong, sejtmagja nincs. Egy köbmilliméter vérben 4,5–5 millió van belőle. A vörös csontvelőben termelődik, élettartama kb. 120 nap, a lép bontja le. Feladata az oxigén és a szén-dioxid szállítása, ehhez a hemoglobint használja. Jellemző betegsége a vérszegénység, latinul anaemia.'},
+ {t:'A fehérvérsejt',p:'A fehérvérsejt latin neve leukocyta. Van sejtmagja, alakja változó. Egy köbmilliméter vérben 4000–10 000 van belőle. A csontvelőben és a nyirokszervekben termelődik. Feladata a kórokozók elleni védekezés. Jellemző betegsége a leukaemia. Típusai: szemcsés, vagyis granulocyta, és szemcsétlen, vagyis agranulocyta. Szemcsés a neutrofil, az eozinofil és a bazofil; szemcsétlen a limfocita és a monocita. A neutrofil a bakteriális fertőzés első védvonala, falósejt. Az eozinofil parazitafertőzésben és allergiában szaporodik fel. A bazofil hisztamint és heparint tartalmaz. A limfocita a fajlagos immunválaszért felel: a B-sejt ellenanyagot termel, a T-sejt a sejtes immunválaszt adja. A monocita a szövetekbe lépve makrofággá, vagyis nagy falósejtté alakul.'},
+ {t:'A vérlemezke',p:'A vérlemezke latin neve thrombocyta. Nem valódi sejt, hanem sejttöredék, a csontvelő óriássejtjeiből, a megakaryocytákból fűződik le, ezért sejtmagja sincs. Egy köbmilliméter vérben 150 000–400 000 van belőle. Élettartama kb. 8–10 nap. Feladata a véralvadás és a vérzéscsillapítás. Hiánya vérzékenységet okoz.'},
+ {t:'A vércsoportok',p:'Az A vércsoportú ember vörösvértestjein A antigén van, a plazmájában anti-B ellenanyag. A B vércsoportúnál B antigén és anti-A ellenanyag van. Az AB vércsoportú ember plazmájában nincs ellenanyag. A nullás vércsoportú ember plazmájában anti-A és anti-B ellenanyag is van.'},
+ {t:'A vérzéscsillapítás és a véralvadás',p:'A vérzéscsillapítás lépései sorrendben: először érösszehúzódás, majd a vérlemezke-dugó kialakulása, ezután az alvadási kaszkád, vagyis az alvadási faktorok láncreakciója, majd kialakul a fibrinháló, végül az alvadék visszahúzódása és feloldása. Még egyszer: érösszehúzódás, vérlemezke-dugó, alvadási kaszkád, fibrinháló, az alvadék visszahúzódása és feloldása.'},
+]}
+];
+
+// ---------- HALLGATÁS: lejátszó (a készülék beépített felolvasójával) ----------
+const SS=window.speechSynthesis||null;
+const LS={lesson:0,mode:'learn',queue:[],idx:0,playing:false,rate:load('vg-rate',1),gap:load('vg-gap',5),voiceName:load('vg-voice',''),token:0,timer:null,wake:null};
+function huVoices(){if(!SS)return[];return SS.getVoices().filter(v=>/^hu/i.test(v.lang))}
+function pickVoice(){const vs=huVoices();if(!vs.length)return null;
+  return vs.find(v=>v.name===LS.voiceName)||vs.find(v=>/tünde|tunde/i.test(v.name)&&/enhanced|premium|továbbfejl/i.test(v.name))||vs.find(v=>/tünde|tunde/i.test(v.name))||vs[0]}
+if(SS){SS.onvoiceschanged=()=>{if(view==='listen')updateVoiceUI()}}
+function speakable(s){return String(s)
+  .replace(/(\d+(?: \d{3})*(?:,\d+)?)\s*[–-]\s*(\d+(?: \d{3})*(?:,\d+)?)\s*(\/\s*mm³|mm³|Hgmm|°C|%|\/min|liter|perc|nap|milliliter|ml)?/g,(m,a,b,u)=>a+' és '+b+(u&&u[0]!=='/'?' '+u+' között':' között'+(u?' '+u:'')))
+  .replace(/\bkb\./g,'körülbelül').replace(/\bpl\./g,'például').replace(/\bpH\b/g,'pé há')
+  .replace(/\/\s*mm³/g,' köbmilliméterenként').replace(/mm³/g,'köbmilliméter').replace(/Hgmm/g,'higanymilliméter')
+  .replace(/\/min\b/g,' percenként').replace(/°C/g,' fok').replace(/%/g,' százalék').replace(/≥/g,'legalább ').replace(/≤/g,'legfeljebb ')
+  .replace(/</g,'kevesebb, mint ').replace(/>/g,'több, mint ').replace(/→/g,', majd ').replace(/×/g,' szor ').replace(/[„”"]/g,'')}
+function splitSent(p){return p.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g).map(s=>s.trim()).filter(Boolean)}
+function qaItems(L){
+  return shuffle(SUBJ[L.subj].bank.filter(q=>q.tp===L.tp&&!q.img&&(q.t==='s'||q.t==='tf')))}
+function buildQueue(){
+  const L=LESSONS[LS.lesson],Q=[];
+  if(LS.mode==='learn'){L.sections.forEach((s,si)=>{Q.push({sec:si,kind:'title',text:s.t});splitSent(s.p).forEach(t=>Q.push({sec:si,kind:'text',text:t}))})}
+  else{qaItems(L).forEach((q,qi)=>{
+    const qtext=q.t==='tf'?'Igaz vagy hamis? '+q.q:q.q;
+    const atext=q.t==='tf'?(q.a?'Igaz.':'Hamis.')+' '+(q.e||''):'A válasz: '+q.o[0]+'. '+(q.e||'');
+    Q.push({sec:qi,kind:'q',text:qtext,label:(qi+1)+'. kérdés'});Q.push({sec:qi,kind:'pause'});Q.push({sec:qi,kind:'a',text:atext,label:'Válasz'})})}
+  LS.queue=Q;LS.idx=0;
+}
+function stopSpeech(){LS.token++;clearTimeout(LS.timer);try{SS&&SS.cancel()}catch(e){}}
+async function wakeOn(){try{if(navigator.wakeLock&&!LS.wake)LS.wake=await navigator.wakeLock.request('screen')}catch(e){}}
+function wakeOff(){try{LS.wake&&LS.wake.release()}catch(e){}LS.wake=null}
+function playFrom(i){
+  stopSpeech();if(i>=LS.queue.length){LS.playing=false;LS.idx=LS.queue.length-1;wakeOff();updateListenUI(true);return}
+  LS.idx=Math.max(0,i);LS.playing=true;wakeOn();updateListenUI();
+  const it=LS.queue[LS.idx],tok=LS.token;
+  if(it.kind==='pause'){LS.timer=setTimeout(()=>{if(tok===LS.token)playFrom(LS.idx+1)},LS.gap*1000);return}
+  if(!SS){LS.playing=false;updateListenUI();return}
+  const u=new SpeechSynthesisUtterance(speakable(it.text));const v=pickVoice();if(v)u.voice=v;u.lang=v?v.lang:'hu-HU';u.rate=LS.rate;
+  const gapAfter=it.kind==='title'?600:it.kind==='a'?1500:250;
+  u.onend=()=>{if(tok!==LS.token)return;LS.timer=setTimeout(()=>{if(tok===LS.token)playFrom(LS.idx+1)},gapAfter)};
+  u.onerror=()=>{};
+  setTimeout(()=>{if(tok===LS.token)SS.speak(u)},60);
+}
+function pauseSpeech(){stopSpeech();LS.playing=false;wakeOff();updateListenUI()}
+function jump(dir){ // előző / következő szakasz vagy kérdés
+  const cur=LS.queue[LS.idx];if(!cur)return;let i;
+  if(dir>0){i=LS.queue.findIndex((x,k)=>k>LS.idx&&x.sec!==cur.sec);if(i<0)i=LS.queue.length}
+  else{const start=LS.queue.findIndex(x=>x.sec===cur.sec);i=(LS.idx-start>1||cur.sec===0)?start:LS.queue.findIndex(x=>x.sec===cur.sec-1)}
+  if(LS.playing)playFrom(i);else{LS.idx=Math.min(Math.max(0,i),LS.queue.length-1);updateListenUI()}
+}
+function updateVoiceUI(){
+  const box=$('#voicebox');if(!box)return;const vs=huVoices(),v=pickVoice();
+  box.innerHTML=!SS?`<div class="warnbox">Ez a böngésző nem támogatja a felolvasást. iPhone-on nyisd meg Safariban.</div>`:
+   vs.length?`<label class="eyebrow" for="voicesel">Hang</label><select id="voicesel">${vs.map(x=>`<option ${v&&x.name===v.name?'selected':''}>${esc(x.name)}</option>`).join('')}</select>${v&&!/tünde|tunde/i.test(v.name)?'<p class="info">Tünde hangja nincs a listában – a telepítését lent találod.</p>':''}`:
+   `<div class="warnbox">Nem található magyar hang a készüléken. Telepítsd Tündét: lásd lent.</div>`;
+}
+function updateListenUI(ended){
+  if(view!=='listen')return;const it=LS.queue[LS.idx]||{};const L=LESSONS[LS.lesson];
+  const n=LS.queue.length;
+  const pct=n?((LS.idx+1)/n*100):0;const pi=$('#lprog');if(pi)pi.style.width=pct+'%';
+  const head=$('#lhead'),body=$('#lbody'),lab=$('#llabel');
+  if(LS.mode==='learn'){const s=L.sections[it.sec]||L.sections[0];if(lab)lab.textContent=`${(it.sec||0)+1}. rész / ${L.sections.length}`;if(head)head.textContent=s.t;if(body)body.textContent=it.kind==='title'?'':it.text||''}
+  else{const total=LS.queue.filter(x=>x.kind==='q').length;if(lab)lab.textContent=`${(it.sec||0)+1}. kérdés / ${total}`;
+    const q=LS.queue.find(x=>x.sec===it.sec&&x.kind==='q'),a=LS.queue.find(x=>x.sec===it.sec&&x.kind==='a');
+    if(head)head.textContent=q?q.text:'';if(body)body.innerHTML=it.kind==='a'?`<b>${esc(a.text)}</b>`:it.kind==='pause'&&LS.playing?`<span class="muted">Gondolkodj… ${LS.gap} mp</span>`:'<span class="muted">A válasz a szünet után hangzik el.</span>'}
+  const pb=$('#lplay');if(pb){pb.textContent=LS.playing?'❚❚ Szünet':(ended?'↻ Újra':'▶ Lejátszás');pb.dataset.act=LS.playing?'lpause':(ended?'lrestart':'lplay')}
+  document.querySelectorAll('.secrow').forEach(r=>r.classList.toggle('on',+r.dataset.s===it.sec));
+}
+function listenView(){
+  document.body.dataset.subj=LESSONS[LS.lesson].subj;
+  if(!LS.queue.length)buildQueue();
+  const L=LESSONS[LS.lesson],nq=qaItems(L).length;
+  return `<div class="wrap">
+    <div class="topbar"><button class="back" data-act="lback" aria-label="Vissza">←</button><div class="t"><span class="eyebrow">Hallgatás · ${SUBJ[L.subj].short}</span><b>${L.title}</b></div></div>
+    <div class="stack">
+      <div class="chips">${[['learn',`Tananyag (${L.sections.length} rész)`],['qa',`Kérdés–válasz (${nq})`]].map(([k,l])=>`<button class="chip" data-act="lmode" data-m="${k}" aria-pressed="${LS.mode===k}">${l}</button>`).join('')}</div>
+      <section class="panel nowplay">
+        <div class="prog"><i id="lprog" style="width:0"></i></div>
+        <span class="eyebrow" id="llabel"></span>
+        <h2 class="qtext" id="lhead" style="margin:0"></h2>
+        <div id="lbody" class="lbody"></div>
+      </section>
+      <section class="panel"><span class="eyebrow">Sebesség</span>
+        <div class="chips">${[0.8,0.9,1,1.1,1.25].map(r=>`<button class="chip" data-act="lrate" data-r="${r}" aria-pressed="${LS.rate==r}">${String(r).replace('.',',')}×</button>`).join('')}</div>
+        ${LS.mode==='qa'?`<span class="eyebrow">Gondolkodási idő a válasz előtt</span><div class="chips">${[3,5,8,12].map(g=>`<button class="chip" data-act="lgap" data-g="${g}" aria-pressed="${LS.gap==g}">${g} mp</button>`).join('')}</div>`:''}
+        <div id="voicebox" class="stack" style="gap:6px"></div>
+      </section>
+      ${LS.mode==='learn'?`<section class="panel"><span class="eyebrow">Részek – koppints egyre az ugráshoz</span><div class="seclist">${L.sections.map((s,i)=>`<button class="secrow" data-act="lsec" data-s="${i}"><span class="num">${i+1}</span>${esc(s.t)}</button>`).join('')}</div></section>`:''}
+      <details class="panel"><summary style="font-weight:700;cursor:pointer">Tünde hangjának telepítése iPhone-on</summary>
+        <ol class="info" style="margin:8px 0 0;padding-left:20px;display:grid;gap:4px">
+          <li>Beállítások → Kisegítő lehetőségek → Felolvasott tartalom → Hangok.</li>
+          <li>Válaszd a Magyar nyelvet, majd Tünde hangját.</li>
+          <li>Ha elérhető a „Továbbfejlesztett” változat, töltsd le – ez szól a legtermészetesebben.</li>
+          <li>Ezután töltsd újra ezt az oldalt, és a Hang listában válaszd Tündét.</li>
+        </ol>
+        <p class="info" style="margin-top:8px">A felolvasás csak addig szól, amíg az oldal nyitva van a képernyőn; lezáráskor megáll. Lejátszás közben az app ébren próbálja tartani a kijelzőt.</p>
+      </details>
+    </div>
+  </div>
+  <div class="bar"><div class="in">
+    <button class="btn" data-act="lprev" aria-label="Előző rész">⏮</button>
+    <button class="btn pri" id="lplay" data-act="lplay">▶ Lejátszás</button>
+    <button class="btn" data-act="lnext" aria-label="Következő rész">⏭</button>
+  </div></div>`;
+}
+function listenClick(act,b){
+  switch(act){
+    case'listen':LS.lesson=0;LS.queue=[];view='listen';render(true);setTimeout(()=>{updateVoiceUI();updateListenUI()},0);return true;
+    case'lback':pauseSpeech();view='home';render(true);return true;
+    case'lplay':playFrom(LS.idx);return true;
+    case'lrestart':playFrom(0);return true;
+    case'lpause':pauseSpeech();return true;
+    case'lnext':jump(1);return true;
+    case'lprev':jump(-1);return true;
+    case'lsec':{const i=LS.queue.findIndex(x=>x.sec===+b.dataset.s);playFrom(i);return true}
+    case'lmode':if(LS.mode!==b.dataset.m){pauseSpeech();LS.mode=b.dataset.m;buildQueue();render();updateVoiceUI();updateListenUI()}return true;
+    case'lrate':LS.rate=+b.dataset.r;save('vg-rate',LS.rate);document.querySelectorAll('[data-act="lrate"]').forEach(x=>x.setAttribute('aria-pressed',x===b));if(LS.playing)playFrom(LS.idx);return true;
+    case'lgap':LS.gap=+b.dataset.g;save('vg-gap',LS.gap);document.querySelectorAll('[data-act="lgap"]').forEach(x=>x.setAttribute('aria-pressed',x===b));return true;
+  }
+  return false;
+}
+document.addEventListener('change',ev=>{if(ev.target.id==='voicesel'){LS.voiceName=ev.target.value;save('vg-voice',LS.voiceName);if(LS.playing)playFrom(LS.idx)}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&LS.playing)pauseSpeech()});
+
 // ---------- tárgyak ----------
 const SUBJ={
   ana:{name:'Anatómia–élettan',short:'Anatómia',bank:ANA,desc:'Bevezetés és mozgásrendszer · A keringési rendszer és a vér',
@@ -878,7 +1031,7 @@ function homeView(){
     </button>`};
   const resume=EX&&!EX.done?`<div class="panel" style="margin-top:16px"><div><span class="eyebrow">Félbehagyott vizsga</span><div style="font-weight:700;margin-top:2px">${SUBJ[EX.subj].name} · ${EX.items.filter(touched).length}/${EX.items.length} megválaszolva</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" data-act="resume" style="background:var(--${EX.subj});border-color:var(--${EX.subj})">Folytatás</button><button class="btn ghost" data-act="discard">Elvetés</button></div></div>`:'';
   return `<div class="wrap">
-    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><button class="chip" data-act="stats" style="justify-self:start;margin-top:8px">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length} kitöltés</button></header>
+    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><div class="chips" style="margin-top:8px"><button class="chip" data-act="stats">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length} kitöltés</button><button class="chip" data-act="listen">🎧 Hallgatás</button></div></header>
     ${resume}
     <div class="subjects">${card('ana')}${card('bm')}</div>
     <p class="foot">Az eredményeid és a már látott kérdések csak ezen az eszközön tárolódnak. ${confirmReset?`<button class="linkbtn" data-act="reset2" style="color:var(--bad)">Biztosan törlöd? Koppints újra.</button>`:`<button class="linkbtn" data-act="reset">Statisztika törlése</button>`}</p>
@@ -1041,14 +1194,15 @@ function statsView(){
 let clockT=null;
 function render(top){
   const app=$('#app');
-  app.innerHTML=view==='stats'?statsView():view==='home'?homeView():view==='setup'?setupView():view==='quiz'?quizView():resultView();
+  app.innerHTML=view==='listen'?listenView():view==='stats'?statsView():view==='home'?homeView():view==='setup'?setupView():view==='quiz'?quizView():resultView();
   if(top)window.scrollTo(0,0);
   clearInterval(clockT);
+  if(view==='listen')setTimeout(()=>{updateVoiceUI();updateListenUI()},0);
   if(view==='quiz')clockT=setInterval(()=>{const c=$('#clock');if(c&&EX)c.textContent=fmtTime(Math.round((Date.now()-EX.start)/1000))},1000);
 }
 document.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-act]');if(!b||b.tagName==='SELECT')return;
-  const act=b.dataset.act, I=EX&&EX.items?EX.items[EX.cur]:null;
+  const act=b.dataset.act;if(listenClick(act,b))return;const I=EX&&EX.items?EX.items[EX.cur]:null;
   switch(act){
     case'open':cfg={subj:b.dataset.k,len:cfg.len||20,topics:null};confirmReset=false;view='setup';render(true);break;
     case'home':view='home';confirmSubmit=false;render(true);break;
