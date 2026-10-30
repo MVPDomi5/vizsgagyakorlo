@@ -794,7 +794,7 @@ const LESSONS=[
 const SS=window.speechSynthesis||null;
 const LS={lesson:0,mode:'learn',queue:[],idx:0,playing:false,rate:load('vg-rate',1),gap:load('vg-gap',5),voiceName:load('vg-voice',''),token:0,timer:null,wake:null};
 function huVoices(){if(!SS)return[];return SS.getVoices().filter(v=>/^hu/i.test(v.lang))}
-function pickVoice(){const vs=huVoices();if(!vs.length)return null;
+function pickVoice(){const vs=huVoices();if(!vs.length||!LS.voiceName)return null;
   return vs.find(v=>v.name===LS.voiceName)||vs.find(v=>/tünde|tunde/i.test(v.name)&&/enhanced|premium|továbbfejl/i.test(v.name))||vs.find(v=>/tünde|tunde/i.test(v.name))||vs[0]}
 if(SS){SS.onvoiceschanged=()=>{if(view==='listen')updateVoiceUI()}}
 function speakable(s){return String(s)
@@ -815,7 +815,14 @@ function buildQueue(){
     Q.push({sec:qi,kind:'q',text:qtext,label:(qi+1)+'. kérdés'});Q.push({sec:qi,kind:'pause'});Q.push({sec:qi,kind:'a',text:atext,label:'Válasz'})})}
   LS.queue=Q;LS.idx=0;
 }
-function stopSpeech(){LS.token++;clearTimeout(LS.timer);try{SS&&SS.cancel()}catch(e){}}
+let AUDIO_UNLOCKED=false;
+function silentWav(){const n=8000,b=new ArrayBuffer(44+n*2),v=new DataView(b),w=(o,s)=>[...s].forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,16000,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'}))}
+function unlockAudio(){if(AUDIO_UNLOCKED)return;AUDIO_UNLOCKED=true;
+  try{const a=new Audio(silentWav());a.setAttribute('playsinline','');a.loop=false;a.volume=1;a.play().catch(()=>{})}catch(e){}
+  try{const C=window.AudioContext||window.webkitAudioContext;if(C){const c=new C();const o=c.createOscillator(),g=c.createGain();g.gain.value=0;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+0.05);c.resume&&c.resume()}}catch(e){}}
+function stopSpeech(){LS.token++;clearTimeout(LS.timer);try{if(SS&&(SS.speaking||SS.pending))SS.cancel()}catch(e){}}
 async function wakeOn(){try{if(navigator.wakeLock&&!LS.wake)LS.wake=await navigator.wakeLock.request('screen')}catch(e){}}
 function wakeOff(){try{LS.wake&&LS.wake.release()}catch(e){}LS.wake=null}
 function playFrom(i){
@@ -828,7 +835,8 @@ function playFrom(i){
   const gapAfter=it.kind==='title'?600:it.kind==='a'?1500:250;
   u.onend=()=>{if(tok!==LS.token)return;LS.timer=setTimeout(()=>{if(tok===LS.token)playFrom(LS.idx+1)},gapAfter)};
   u.onerror=()=>{};
-  setTimeout(()=>{if(tok===LS.token)SS.speak(u)},60);
+  try{SS.resume&&SS.resume()}catch(e){}
+  SS.speak(u);
 }
 function pauseSpeech(){stopSpeech();LS.playing=false;wakeOff();updateListenUI()}
 function jump(dir){ // előző / következő szakasz vagy kérdés
@@ -839,9 +847,10 @@ function jump(dir){ // előző / következő szakasz vagy kérdés
 }
 function updateVoiceUI(){
   const box=$('#voicebox');if(!box)return;const vs=huVoices(),v=pickVoice();
-  box.innerHTML=!SS?`<div class="warnbox">Ez a böngésző nem támogatja a felolvasást. iPhone-on nyisd meg Safariban.</div>`:
-   vs.length?`<label class="eyebrow" for="voicesel">Hang</label><select id="voicesel">${vs.map(x=>`<option ${v&&x.name===v.name?'selected':''}>${esc(x.name)}</option>`).join('')}</select>${v&&!/tünde|tunde/i.test(v.name)?'<p class="info">Tünde hangja nincs a listában – a telepítését lent találod.</p>':''}`:
-   `<div class="warnbox">Nem található magyar hang a készüléken. Telepítsd Tündét: lásd lent.</div>`;
+  if(!SS){box.innerHTML=`<div class="warnbox">Ez a böngésző nem támogatja a felolvasást. iPhone-on nyisd meg Safariban.</div>`;return}
+  box.innerHTML=`<label class="eyebrow" for="voicesel">Hang</label><select id="voicesel"><option value="" ${!v?'selected':''}>Rendszer alapértelmezett magyar hang (ajánlott)</option>${vs.map(x=>`<option value="${esc(x.name)}" ${v&&x.name===v.name?'selected':''}>${esc(x.name)}</option>`).join('')}</select>
+  <button class="chip" data-act="ltest" style="justify-self:start">🔊 Hangpróba</button>
+  <p class="info">Ha nincs hang: kapcsold ki a néma módot (oldalsó kapcsoló / műveletgomb), és hagyd az „alapértelmezett” hangot.</p>`;
 }
 function updateListenUI(ended){
   if(view!=='listen')return;const it=LS.queue[LS.idx]||{};const L=LESSONS[LS.lesson];
@@ -896,8 +905,9 @@ function listenClick(act,b){
   switch(act){
     case'listen':LS.lesson=0;LS.queue=[];view='listen';render(true);setTimeout(()=>{updateVoiceUI();updateListenUI()},0);return true;
     case'lback':pauseSpeech();view='home';render(true);return true;
-    case'lplay':playFrom(LS.idx);return true;
-    case'lrestart':playFrom(0);return true;
+    case'lplay':unlockAudio();playFrom(LS.idx);return true;
+    case'ltest':{unlockAudio();stopSpeech();const u=new SpeechSynthesisUtterance('Szia! Ha ezt hallod, a felolvasás működik.');const v=pickVoice();if(v)u.voice=v;u.lang=v?v.lang:'hu-HU';u.rate=LS.rate;SS&&SS.speak(u);return true}
+    case'lrestart':unlockAudio();playFrom(0);return true;
     case'lpause':pauseSpeech();return true;
     case'lnext':jump(1);return true;
     case'lprev':jump(-1);return true;
