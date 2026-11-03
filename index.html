@@ -12,7 +12,7 @@
 /* Layout: egyoszlopos, telefonra szabott app; ragadós felső sáv + alsó akciósáv. Anatómia = vér-bordó, Betegmegfigyelés = kórlap-petrol. */
 :root{
   --bg:#eef1f4; --surface:#ffffff; --sunk:#e3e8ed; --ink:#15202b; --muted:#5a6876; --line:#d4dbe2;
-  --ana:#9e2236; --ana-soft:#f6e3e6; --bm:#0d6b72; --bm-soft:#dcf0f1;
+  --ana:#9e2236; --ana-soft:#f6e3e6; --agv:#4f3fa8; --agv-soft:#e8e4f7; --bm:#0d6b72; --bm-soft:#dcf0f1;
   --ok:#1b7a4b; --ok-soft:#dff3e8; --bad:#bd3326; --bad-soft:#fbe5e2; --warn:#a86700; --warn-soft:#fbefd9;
   --acc:var(--ink); --acc-soft:var(--sunk);
   --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
@@ -22,14 +22,15 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e1419; --surface:#172029; --sunk:#202b36; --ink:#e7edf2; --muted:#93a2b0; --line:#2b3845;
-  --ana:#ec7186; --ana-soft:#3a1d24; --bm:#4cc0c6; --bm-soft:#123236;
+  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --bm:#4cc0c6; --bm-soft:#123236;
   --ok:#4ccb8a; --ok-soft:#14301f; --bad:#f2786b; --bad-soft:#3a1c19; --warn:#f0b351; --warn-soft:#352812; color-scheme:dark;}}
 :root[data-theme="dark"]{
   --bg:#0e1419; --surface:#172029; --sunk:#202b36; --ink:#e7edf2; --muted:#93a2b0; --line:#2b3845;
-  --ana:#ec7186; --ana-soft:#3a1d24; --bm:#4cc0c6; --bm-soft:#123236;
+  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --bm:#4cc0c6; --bm-soft:#123236;
   --ok:#4ccb8a; --ok-soft:#14301f; --bad:#f2786b; --bad-soft:#3a1c19; --warn:#f0b351; --warn-soft:#352812; color-scheme:dark;}
 body[data-subj="ana"]{--acc:var(--ana);--acc-soft:var(--ana-soft)}
 body[data-subj="bm"]{--acc:var(--bm);--acc-soft:var(--bm-soft)}
+body[data-subj="agv"]{--acc:var(--agv);--acc-soft:var(--agv-soft)}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
@@ -55,7 +56,7 @@ h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:
 .subj .meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--muted)}
 .subj .meta b{color:var(--ink);font-weight:700}
 .subj svg.trace{position:absolute;right:-6px;top:4px;width:130px;height:48px;opacity:.35;pointer-events:none}
-.subj[data-s="ana"]{--c:var(--ana)} .subj[data-s="bm"]{--c:var(--bm)}
+.subj[data-s="agv"]{--c:var(--agv)} .subj[data-s="ana"]{--c:var(--ana)} .subj[data-s="bm"]{--c:var(--bm)}
 .subj .go{justify-self:start;margin-top:4px;background:var(--c);color:var(--surface);border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:16px}
 .foot{margin-top:24px;font-size:13.5px;color:var(--muted)}
 .linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:13.5px}
@@ -174,6 +175,9 @@ figure.fig.sticky img{max-height:36vh}
 .secrow .num{color:var(--muted);font-size:12px;min-width:18px}
 .secrow.on{border-color:var(--acc);background:var(--acc-soft);font-weight:700}
 details.panel summary{list-style-position:inside}
+.sect{font-size:22px;font-weight:800;margin-top:28px}
+.ftext{font-size:17px;line-height:2.2;display:block}
+.ftext select{width:auto;display:inline-block;max-width:100%;padding:6px 30px 6px 10px;margin:2px 2px;font-size:15.5px;vertical-align:middle}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -765,6 +769,174 @@ S('elet','Melyik hőmérő forgalmazása szűnt meg, mert mérgező anyagot tart
 MA('elet','Párosítsa a hőmérőt a jellemzőjével!',[['digitális hőmérő','a leggyakoribb: gyors, biztonságos, hangjelzéssel'],['dobhártya-hőmérő','infravörös érzékelés; gyors, de helyes technikát kíván'],['folyadékkristályos hőmérő','homlokra helyezett csík – tájékoztató érték'],['gallium üveghőmérő','a higanyos hőmérő biztonságos utódja; lassabb, de pontos']],4,'Minden hőmérőt használat előtt és után fertőtlenítünk; a rectalisat elkülönítve, jelöléssel tároljuk.'),
 );
 
+// ---------- ÁGAZATI ALAPVIZSGA – Betegmegfigyelés és vitális paraméterek (OKFŐ feladatbank, megoldókulcs szerint) ----------
+function F(tp,q,parts,e){return{t:'f',tp,q,parts,e}}
+function IH(tp,q,items,e){return C(tp,q,['Igaz','Hamis'],items.map(([t,a])=>[t,a?0:1]),items.length,e||'A megoldókulcs szerint.')}
+function MX(tp,q,pairs,e){return MA(tp,q,pairs,pairs.length,e||'A megoldókulcs szerint.')}
+function CX(tp,q,groups,items,e){return C(tp,q,groups,items,items.length,e||'A megoldókulcs szerint.')}
+const K='A megoldókulcs szerint.';
+const AGV=[
+// 1–17 Alapok, tünetek, testalkat, bőr
+IH('alap','Döntse el, hogy az alábbi állítás igaz-e vagy hamis!',[['A betegmegfigyelés az ápolói munka része.',1],['A betegmegfigyelés az ápoló önálló feladatai közé tartozik.',1],['A betegmegfigyelés nem része az életveszélyes helyzetek megítélésének.',0]]),
+CX('alap','Csoportosítsa a felsoroltakat a kommunikáció formái szerint!',['direkt','indirekt'],[['betegtől származó információ',0],['egészségügyi dolgozótól származó információ',0],['kórlap',1],['zárójelentés',1]]),
+F('alap','Egészítse ki a tünetek fajtáival kapcsolatos alábbi mondatokat!',['Szubjektív tünetek, melyek szemmel ',['nem láthatók','láthatók','mérhetők'],'. Objektív tünetek a ',['mérhető','nem látható','nem érzékelhető'],' tünetek.'],K),
+MX('alap','Párosítsa a fogalmakat jelentésükkel!',[['Szubjektív tünet','A panaszt csak a beteg észleli.'],['Objektív tünet','A megfigyelést végző is észlelni tudja, akár megfigyelés, akár vizsgálat útján.'],['Szindróma','A meghatározott kórképekre jellemző tünetek együttese.']]),
+M('alap','Válassza ki az objektív tüneteket! (Több válasz is lehetséges!)',['láz','hidegrázás','szapora pulzus'],['fejfájás','szédülés','fájdalom'],K),
+M('alap','Válassza ki az objektív tüneteket! (Több válasz is lehetséges!)',['magas vérnyomás','vadászkutya-fekvés','dobverőujj'],['hányinger','rossz közérzet','levertség'],K),
+M('alap','Válassza ki a szubjektív tüneteket! (Több válasz is lehetséges!)',['hányinger','rossz közérzet','levertség','szédülés','fájdalom'],['láz','hidegrázás','szapora pulzus','magas vérnyomás','vadászkutya-fekvés'],K),
+F('alap','Válassza ki az alábbi szakkifejezések magyar jelentését!',['symptoma: ',['tünet','megfigyelés','betegség'],' · syndroma: ',['tünetegyüttes','betegség','megfigyelés']],K),
+MX('alap','Párosítsa a fogalmakat jelentésükkel!',[['tünetszegény a betegség','Ha nem okoz jellemző szubjektív vagy objektív tüneteket.'],['atípusos tünetek','Ha a betegség nem a megszokott tünetekkel, hanem azoktól részben vagy egészben eltérő módon jelentkezik.'],['tünetmentesség','Előfordulhat, hogy a betegség egy egész élet folyamán nem okoz panaszt.']]),
+M('alap','Válassza ki a vitális paramétereket!',['légzés','vérnyomás','pulzus','hőmérséklet'],['vércukorszint','tudatállapot','vérkép','vizeletürítés'],K),
+CX('alap','Csoportosítsa a felsoroltakat aszerint, hogy milyen módon érzékeljük azokat!',['látás','hallás'],[['bőrszín',0],['járás',0],['vizelet színe',0],['beszédnehézség',1],['köhögés',1]]),
+IH('alap','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A testalkat az egyén öröklött és szerzett szomatikus tulajdonságainak az összessége.',1],['A testalkatot csak a genetikai tényezők határozzák meg, a környezeti hatások nem befolyásolják.',0]]),
+S('alap','Válassza ki az alábbiak közül azt az egyet, amelyik NEM Hippokratész által meghatározott alkattípus!',['piknikus','szangvinikus','kolerikus','melankolikus','flegmatikus'],K),
+M('alap','Válassza ki a Hippokratész által meghatározott alkattípusokat! (Több válasz is lehetséges!)',['kolerikus','melankolikus'],['piknikus','asztémiás','atlétikus'],K),
+CX('alap','Csoportosítsa az alábbi testalkatokat!',['Jellegzetes női testalkat','Jellegzetes férfi testalkat'],[['alma',0],['homokóra',0],['szögletes',1],['háromszög',1]]),
+F('alap','Egészítse ki a bőrrel kapcsolatos alábbi mondatokat!',['A felnőtt ember bőrfelülete kb. ',['1,5–1,8','0,3–0,5','4,2–4,5'],' m², feladata a szervezet külső hatásoktól való védelme. A felhám feladata a bőr ',['legfelső','legalsó','középső'],' rétegének fenntartása. A bőr árnyalatáért a(z) ',['melanin','bilirubin','karotinoid'],' a felelős. A bőr idős korban ',['könnyen ráncba szedhető','feszes','rugalmas'],'.'],K),
+MX('alap','Párosítsa a szakkifejezéseket a jelentésükkel!',[['cyanosis','szederjesség (a bőr/nyálkahártya/körömágy kékesvörös hypoxia következtében)'],['oedema','vizenyő'],['ascites','hasüregben felszaporodó folyadékgyülem']]),
+// 18–24 Fájdalom, tudatállapot
+M('fajd','Válassza ki a krónikus fájdalomra vonatkozó helyes megállapításokat! (Több válasz is lehetséges!)',['A fájdalom fennállása több mint három hónap.','A beteg életminőségét befolyásolja.'],['A fájdalom rövid ideig tart és nem tér vissza.','A fájdalom fennállása kevesebb, mint három hónap.'],K),
+MX('fajd','Párosítsa a fájdalom jellegéhez a meghatározásukat!',[['szomatikus','egy-egy sérülés, heveny betegség tünete'],['zsigeri, vagy visceralis','belső szervek betegségét kíséri'],['neuropátiás','az érző tevékenység hibájára vezethető vissza'],['neuralgiás','a környéki ideg ellátási területén jelentkezik']]),
+MX('fajd','Egészítse ki a Visual Analóg Skála (fájdalomskála) értékeivel! Melyik erősség (0–10) melyik fájdalomérzethez tartozik?',[['teljes fájdalommentesség','0'],['enyhe fájdalom','1–3'],['közepes fájdalom','4–6'],['erős fájdalom','7–9'],['tűrhetetlen, elviselhetetlen fájdalom','10']]),
+MX('fajd','Párosítsa az alábbi betegségekhez a rájuk jellemző fájdalomtípusokat!',[['epeköves roham','A jobb bordaív alatt kezdődik, a jobb lapocka és a jobb váll irányába sugárzó erős fájdalom.'],['veseköves roham','Igen erős, a deréktájról induló fájdalom, az alhasba és a combok belső felszíne felé sugárzik.'],['angina pectoris','Hirtelen heves fájdalom a szegycsont mögött, a bal váll és a nyak bal oldalába sugárzik.'],['hashártyagyulladás','Igen erős, a teljes hasra kiterjedő fájdalom, a has kemény, feszes.']]),
+MX('fajd','Párosítsa az alábbi jellegzetes fájdalmakat a fájdalmat kiváltó kórképekkel!',[['nyombélfekély','Erős gyomortáji fájdalom, amely éhgyomorra jelentkezik.'],['vakbélgyulladás','Általában a gyomortájon kezdődő, majd típusos esetben a jobb alhasra lokalizálódó fájdalom, amelyet gyakran hányás és láz kísér.'],['tüdőembólia','Hirtelen jelentkező, szúró, légzésre fokozódó mellkasi fájdalom, amelyet felületes légzés, dyspnoe, haemoptoe kísér.']]),
+MX('fajd','Párosítsa az alábbi jellegzetes fájdalmakat a fájdalmat kiváltó kórképekkel!',[['szívroham','Szegycsont mögött jelentkező, tűrhetetlen fájdalom.'],['gyomorfekély','Éhgyomorra jelentkező fájdalom. Hányinger kísérheti.'],['méhen kívüli terhesség','Hasi fájdalom, amit hányás, hányinger, vérnyomásesés, eszméletvesztés kísérhet.']]),
+MX('fajd','Párosítsa az alábbi tudatállapotokat azok jellemzőivel!',[['apátia','A beteg mozdulatlanul fekszik, a feltett kérdésekre válaszol, de lassan. A környezetével szemben érdektelen.'],['eufória','Az addig elesett, súlyos beteg hirtelen jókedvűvé, mozgékonnyá válik.'],['delírium','A beteg nyugtalan, kiabál, kóborol, hallucinál. Magas láz, központi idegrendszeri izgalom következménye lehet.'],['térbeli és időbeli tájékozatlanság','Főleg agyi keringési elégtelenségben szenvedő betegnél fordul elő. A beteg nem tudja, hol van, nem tudja megmondani a hónapot, napot.']]),
+MX('fajd','Párosítsa a felsorolt kóros tudatállapotokat azok jellemzőivel!',[['Somnolentia','A beteg aluszékony, szinte az egész idejét félálomban tölti, de felébreszthető.'],['Sopor','Igen mély alvás, amelyből a beteg csak erős ingerekkel ébreszthető fel.'],['Coma','Mély kábultság, a beteg semmiféle ingerrel nem ébreszthető fel.']]),
+// 25–45 Testváladékok
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['Nem minden váladékot tekintünk fertőzöttnek, ami a betegtől származik.',0],['Az emberi szervezet működése során különböző összetételű salakanyagot termel.',1],['A váladékok ürítési módjának változása nem segíti a diagnózis felállítását.',0],['A betegtől származó váladékok tárolásánál be kell tartani az aszepszis szabályait.',1]]),
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['A széklet az emésztési folyamat végtermékeként kialakuló salakanyag.',1],['A széklet színét az urokróm adja.',0],['A székletürítést nem befolyásolja az életkor és a testmozgás.',0],['A széklet tartalmaz baktériumokat is.',1],['Naponta egyszer, maximum kétszer ürül széklet normál körülmények között.',1]]),
+MX('valad','Párosítsa a kifejezéseket a rájuk jellemző állításokkal!',[['normál székelés','naponta egyszer, maximum kétszer ürül'],['székrekedés','2–3 napnál ritkább székletürítés'],['hasmenés','naponta többszöri, híg széklet'],['széklet beékelődés','megkeményedett székletgyülem, ami beékelődött a végbélben']]),
+MX('valad','Párosítsa az alábbi jellegzetes székletelváltozásokat az azok hátterében húzódó kórképekkel!',[['világos, agyagszerű (acholiás) széklet','epeút-elzáródás'],['szurokszéklet','nyelőcső- vagy gyomorvérzés'],['fekete, formált széklet','vastartalmú gyógyszerek alkalmazása'],['véres, hasmenéses széklet','fekélyes vastagbélgyulladás'],['vércsík a széklet felszínén','aranyeresség']]),
+MX('valad','Párosítsa a véres széklet kiváltó okait azok főbb jellemzőivel!',[['fekete széklet (melaena)','a széklet emésztett vért tartalmaz'],['széklet felülete véres','a vér az aranyeres csomók megrepedéséből származik'],['okkult vérzés','a vér szabad szemmel nem látható, csak laboratóriumi vizsgálattal mutatható ki'],['friss vagy alvadékos vér','a vér az alsóbb béltraktusból származik']]),
+MX('valad','Párosítsa az alábbi állapotokat a széklet állagával!',[['székrekedés','kemény, bogyós széklet'],['felszívódási zavar','pépes széklet'],['hasmenés','híg állagú széklet'],['nem fertőzéses bélgyulladás','véres-nyákos széklet']]),
+F('valad','Egészítse ki a széklet szagával kapcsolatos alábbi mondatokat!',['Rothadásos, bűzös szagú széklet ',['fehérje','zsír','szénhidrát'],' emésztési zavarra utal. Erjedéses, savanykás szagú széklet ',['szénhidrát','fehérje','zsír'],' emésztési zavarra utal. Erősen erjedt, cefre szagú széklet nagyobb mennyiségű ',['alkohol','zöldség','fehérje'],' fogyasztása után tapasztalható.'],K),
+S('valad','Jelölje be az alábbiak közül, mely eszköz NEM alkalmas a széklet felfogására és vizsgálatra küldésére!',['pipetta','F-tartály','celofán csík','pelenka'],K),
+IH('valad','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A vizelet normál élettani körülmények között mindig tartalmaz fehérjét.',0],['A vizeletürítést nem befolyásolják a gyógyszerek, a terhesség és az éghajlati viszonyok.',0],['Normál körülmények között a vizelet enyhén savanyú vegyhatású.',1],['A vizelet normál esetben nem tartalmaz cukrokat.',1]]),
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['A napi ürített vizelet mennyisége élettani körülmények között a folyadékbevitelhez igazodik.',1],['A vizelet színét nem befolyásolják a gyógyszerek.',0],['A vizelet normál esetben fehéres-sárga színű.',0],['Az állott vizelet erős ammóniaszagú.',1]]),
+MX('valad','Párosítsa a tüneteket jelentésükkel!',[['bő vizelés','A vizelet napi mennyisége meghaladja a 2500 ml-t.'],['a vizelet mennyiségének csökkenése','A vizelet napi mennyisége 100–400 ml között mozog.'],['a vizeletkiválasztás szünetelése','A napi vizeletmennyiség 100 ml alatt van.'],['éjszakai vizeletürítés','Nagy mennyiségű, gyakori éjszakai vizeletürítés.']]),
+CX('valad','Csoportosítsa a folyadékegyenleg összetevőit!',['Bevitt folyadék','Ürített folyadék'],[['kávé',0],['gyümölcs',0],['transzfúzió',0],['hányás',1],['sebváladék',1],['köpet',1]]),
+CX('valad','Csoportosítsa a folyadékegyenleg összetevőit!',['Bevitt folyadék','Ürített folyadék'],[['leves',0],['fagylalt',0],['izzadás',1],['hasmenés',1],['széklet',1]]),
+MX('valad','Párosítsa a vizelet színének változásait az alábbi állapotokkal!',[['sárgásbarna','májbetegség'],['véres','veséből és a húgyutakból származó vérzés'],['fehéres-sárga','gennyvizelés']]),
+MX('valad','Párosítsa a vizelet áttetszőségét az állapotokkal!',[['tört színű vizelet','gennyes'],['opálos','magas fehérjetartalom'],['véres','vörösen áttetsző']]),
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['Egészséges körülmények között a vizelet fajsúlya 1010–1020 g/ml között megfelelő.',1],['A fajsúly az oldott anyagok koncentrációjától és a víz mennyiségének arányától függ.',1],['A magas fajsúly hígított vizeletre utal.',0]]),
+MX('valad','Párosítsa a köhögés formáit azok jellemzőivel!',[['produktív köhögés','szörcsölő hang kísérheti'],['inproduktív köhögés','száraz köhögés'],['ugató jellegű köhögés','be- és kilégzés nehezített']]),
+MX('valad','Párosítsa a köpeteket jellemzőikkel!',[['nyálkás köpet','híg, színtelen nyálka'],['nyálkás-gennyes köpet','a nyálkán kívül színes, átlátszatlan gennyet is tartalmaz'],['véres köpet','világospiros, habos vagy alvadt vércsomókat tartalmaz']]),
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['A köpet normál esetben színtelen és enyhén bűzös.',0],['Tüdővizenyő esetén a köpet fehér habos.',1],['A köpet tartalmazhat nyákot, vért, gennyet, de férgeket nem.',0],['Vérzés esetén a köpet színe sárgás-zöldes.',0],['TBC-s beteg köpete véres, élénkpiros.',1]]),
+IH('valad','Döntse el, hogy az alábbi állítások igazak vagy hamisak!',[['A köpőcsésze használata zavart beteg esetén nem javasolt!',1],['Köpőcsészébe nem szükséges fertőtlenítőszerből oldatot készítenünk.',0],['A véres köpetet „H”-val kell jelölni a lázlapon.',1]]),
+MX('valad','Párosítsa a testváladékokat a vizsgálatra küldésükre használt eszközökkel!',[['széklet','F-tartály'],['hüvelyváladék','tárgylemez'],['köpet','Dy-tartály'],['liquor','steril kémcső']]),
+// 46–53 Időskor, testméretek
+IH('test','Döntse el, hogy az alábbi időskorral kapcsolatos állítások igazak vagy hamisak!',[['Időskorban a bőr veszít víztartalmából és csökken a rugalmassága.',1],['Az izmok összehúzódó képessége nő, a mozgás beszűkül.',0],['A fogakat támasztó szövetek sorvadnak, viszont a rágóképesség nem csökken.',0],['Gyakrabban fordul elő székrekedés és éjszakai vizelés.',1]]),
+CX('test','Válassza ki a szervek felépítését és működését érintő időskori változásokat!',['csökken','nő'],[['A bőr víztartalma',0],['Az izmok összehúzódó képessége',0],['Az emésztés és a felszívódás',0]]),
+S('test','Jelölje be a felnőttek normál tápláltsági állapotának megfelelő Body Mass Index (BMI) értékét!',['20–25','16–18','25–40'],K),
+S('test','Jelölje be a felnőttek alultápláltsági állapotának megfelelő Body Mass Index (BMI) értékét! (Csak egy helyes válasz lehetséges!)',['16–18','20–25','30 <'],K),
+S('test','Jelölje be a felnőttek súlyos túlsúlyos állapotának megfelelő Body Mass Index (BMI) értékét! (Csak egy helyes válasz lehetséges!)',['30 <','16–18','20–25'],K),
+IH('test','Döntse el, hogy az alábbi állítás igaz-e vagy hamis!',[['Testtömegmérést kórházi körülmények között általában naponta végzik.',0],['Vízhajtó adásakor a testtömegmérést gyógyszer bevétele előtt és 24 óra múlva végzik.',1]]),
+M('test','Válassza ki a testmagassággal és mérésével kapcsolatos helyes megállapításokat! (Több válasz is lehetséges!)',['Testmagasságot függőleges felület mellett egyenes testtartással, a sarkak összeérintésével mérjük.','A végleges testmagasságot 20–22 éves kor között éri el az ember.'],['A végleges testmagasságot a nők 18 éves korukra, a férfiak 23 éves korukra érik el.','Testmagasságot függőleges felület mellett egyenes testtartással, vállszéles terpeszállásban állva mérjük.'],K),
+IH('test','Döntse el, hogy az alábbi állítás igaz-e vagy hamis!',[['A testmagasság és a testkörfogat értékével együtt meghatározható a testtömeg-index.',0],['A leggyakoribb testkörfogat-mérési helyek: has, derék, csípő, comb, lábszár, újszülött- és csecsemőkorban fejkörfogat.',1]]),
+// 54–77 Vitális paraméterek
+M('vital','Válassza ki az alábbiak közül a hypothermia tüneteit! (Több válasz is lehetséges!)',['hűvös bőr','pulzus csökkenése','légzésszám csökkenése'],['kipirult, meleg bőr','szapora légzés','fejfájás'],K),
+M('vital','Válassza ki az alábbiak közül a hyperthermia tüneteit! (Több válasz is lehetséges!)',['kipirult, meleg bőr','szapora légzés','étvágytalanság','fejfájás','pulzusszám emelkedése'],['hűvös bőr','enyhe didergés','légzésszám csökkenése'],K),
+M('vital','Válassza ki a testhőmérséklettel kapcsolatos helyes megállapításokat! (Több válasz is lehetséges!)',['A normális, fiziológiás testhőmérséklet 36–37 °C között van.','A hőmérséklet dokumentálható lázlapon (színes lázgörbével) vagy a megfigyelőlapon arab számokkal felírva.'],['A testhőmérséklet napi ingadozása normál körülmények között nem haladhatja meg a 0,5 °C-t.','Az orálisan mért hőmérsékletnél 0,3 °C-t, a rectalisan mért hőmérsékletnél 0,3 °C-t kell az értékhez hozzáadni.'],K),
+MX('vital','Párosítsa a láztípusokat!',[['állandó láz','febris continua'],['ingadozó láz','febris remittens'],['ugráló vagy változó láz','febris intermittens'],['váltóláz','febris undulans']]),
+F('vital','Válassza ki az alábbi meghatározás alapján a láztípusok magyar megfelelőjét!',['A napi ingadozás 1 °C-nál nagyobb, nincs láztalan állapot: ',['ingadozó láz','visszatérő láz','ugrálóláz'],'. A napi ingadozás 1 °C-nál nagyobb, reggel láztalanság is lehet: ',['ugrálóláz','visszatérő láz','ingadozó láz'],'. Napokig tartó lázas és láztalan időszakok váltakoznak: ',['visszatérő láz','ingadozó láz','ugrálóláz'],'.'],K),
+MX('vital','Párosítsa a szakkifejezéseket a jelentésükkel!',[['pulsus filiformis','szapora, elnyomható pulzus'],['hyperpyrexia','igen magas láz'],['subfebrilitas','hőemelkedés']]),
+MX('vital','Párosítsa a szakkifejezéseket a jelentésükkel!',[['bradypnoe','ritmusos, alacsony légzésszám'],['hyperventillatio','ritmusos, szapora, erőltetett, mély légzés'],['tachypnoe','ritmusos, szapora, felületes légzés']]),
+M('vital','Válassza ki a pulzusmérés lehetséges helyeit! (Több válasz is lehetséges!)',['arteria carotis communis','arteria radialis','arteria temporalis','arteria femoralis','arteria poplitea'],['aorta ascendens','truncus pulmonalis','arteria coronaria dextra','ramus circumflexus'],K),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A pulzusszámot kizárólag tapintással tudjuk meghatározni.',0],['A 100/perc feletti pulzusszámot tachycardiának nevezzük.',1],['A tachycardia nem minden esetben kóros.',1],['A pulzusszámot nem befolyásolhatják érzelmi hatások.',0]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A 70/perc alatti pulzusszámot bradycardiának nevezzük.',0],['A fájdalom növeli a pulzusszámot.',1]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A láz emeli a pulzusszámot.',1],['Fizikai aktivitás soha nem emeli 100/perc fölé a pulzusszámot.',0],['Az arteria carotison centrális, míg az arteria radialison perifériás pulzust tapinthatunk.',1]]),
+F('vital','Válassza ki az alábbi meghatározás alapján a pulzus ritmusbeli változásainak latin megfelelőjét!',['„Pótütés”, a ritmus rendszeresen vagy rendszertelenül működik, szívkihagyás érzése, idő előtti systole: ',['extrasystolia','arrhythmia','trigeminia'],'. A tapintható lüktetések szabálytalanul követik egymást: ',['arrhythmia','extrasystolia','trigeminia'],'.'],K),
+F('vital','Egészítse ki a pulzusvizsgálattal kapcsolatos alábbi mondatokat!',['A pulzus vizsgálata a megfelelő helyen, ',['3 ujjal','hüvelykujjal','2 ujjal'],' tapintva, enyhén a csontos alaphoz nyomva, 1 percig történik. A lázlapra vonaldiagrammal ',['a hőmérséklettől elütő színnel','zöld színnel'],' vagy dekurzuslapon számmal kell feltüntetni.'],K),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A légzésszámolás akkor pontos, ha a beteggel együtt végezzük.',0],['A légzésszám élettani körülmények között függ az életkortól, az idegrendszer állapotától, izommunkától, a levegő páratartalmától.',1],['A légzés a férfiaknál inkább mellkasi, a nőknél inkább hasi típusú.',0],['Az egészséges felnőtt percenként 12–16-ot lélegzik.',1]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A légzésszámot a hideghatás csökkenti, az alvás növeli.',0],['A testhőfok emelkedésekor, a légzőfelület csökkenésekor a légzésszám fokozódik.',1],['Altatószer- és morfinmérgezésben csökken a légzésszám.',1],['A légzőközpont tartós működészavara esetén a légzésszám nő.',0]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A légzés az oxigén és szén-dioxid kicserélődése a vér és a légköri levegő, illetve a vér és a szövetek között.',1],['A légzésszámolás csak akkor pontos, ha előtte a beteget figyelmeztetjük a szabályos légvételre.',0],['A légzésszámolás legalább három percig tart.',0],['A be- és kilégzés szabályos váltakozását a nyúltvelőben lévő légzőközpont szabályozza.',1]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A légzésszámolás csak akkor pontos, ha a beteg nem veszi észre, ezért a pulzusméréssel együtt végezzük.',1],['Alvás közben a légzésszám szapora és felületes.',0],['Normális körülmények között a ki- és belégzések szabályosan követik egymást, és a légvételek mélysége és időtartama egyforma.',1],['A légvételek kiváltásának kémiai ingere a vérben felszaporodó oxigén, mely a légzőközpontot ingerli.',0]]),
+MX('vital','Párosítsa a fogalmakat a nekik megfelelő jellemzőkkel!',[['bradypnoe','alacsony légzésszám'],['tachypnoe','magas légzésszám'],['hiperventilláció','szapora légvétel kis volumennel'],['dyspnoe','nehézlégzés'],['Kussmaul-légzés','nagy frekvenciával nagy volumenű légvétel']]),
+MX('vital','Párosítsa az egyes betegségeket a rájuk jellemző lehelet szagával!',[['cukorbetegség','acetonszagú lehelet'],['veseelégtelenség','vizeletszagú lehelet'],['májkóma','májszagú lehelet']]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A vérnyomás a keringő vér által az erek rugalmas falára kifejtett nyomás.',1],['A vérnyomás értéke nem változik a szívciklus során a systole és a diastole alatt.',0],['A vérnyomásértékek fiziológiás szint alá süllyedésekor hypotoniáról beszélünk.',1]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A vérnyomásértékek fiziológiás szint alá süllyedésekor hypertoniáról beszélünk.',0],['A systolés és diastolés vérnyomásérték különbségét perfúziós nyomásnak nevezzük.',0],['A systolés és diastolés vérnyomásérték különbségét pulzusnyomásnak nevezzük.',1]]),
+IH('vital','Döntse el, hogy az alábbi megállapítások igazak vagy hamisak!',[['A vérnyomásmérő mandzsettáját a meztelen felkar közepére helyezzük fel.',1],['A vérnyomásmérés előtt 5 perccel már ne fogyasszon koffeines és alkoholos italt, ne dohányozzon a páciens.',0],['Se a beteg, se a vizsgáló ne beszéljen a vérnyomásmérés alatt.',1]]),
+F('vital','Egészítse ki a vérnyomásméréssel kapcsolatos mondatokat! (Az első hallható hang a Korotkoff I. fázis, a II.-ban a hang kissé erősödik, a III.-ban egyenletes, a IV.-ben halkul, a legutolsó hallható hang az V. fázis.)',['A systolés nyomásnak a(z) ',['I. fázis','II. fázis','III. fázis'],' felel meg, a diastolés értéket a(z) ',['V. fázis','IV. fázis','III. fázis'],' adja.'],K),
+F('vital','Egészítse ki a hagyományos (higanyos vagy aneroid) vérnyomásmérővel történő méréssel kapcsolatos mondatokat!',['Fel kell pumpálni a mandzsettát a várt ',['systolés','diastolés'],' érték fölé, és a fonendoszkóp membránját a könyökhajlatba kell helyezni. ',['Lassan, egyenletesen','Gyorsan, hirtelen','Szaggatottan'],' engedjük le a nyomást a mandzsettából, és a fonendoszkópon keresztül hallgatjuk a Korotkoff-hangokat.'],K),
+// 78–80 Fertőtlenítés
+O('fert','Állítsa helyes sorrendbe az egyfázisú fertőtlenítés lépéseit!',['kontaminálódott eszközök gyűjtése','előmosás erős vízsugárral','fertőtlenítés','öblítés','szárítás'],K),
+MX('fert','Párosítsa a kémiai fertőtlenítés módjait azok leírásával!',[['lemosás','ezt a módszert az egybefüggő vízálló felületeken alkalmazzuk'],['permetezés','a fertőtlenítő oldatot mechanikus porlasztással juttatjuk a felületre'],['átkefélés','ágybetétek, ruházatok fertőtlenítésére használjuk'],['beáztatás','az eszközt, anyagot a fertőtlenítőszer oldatába helyezzük']]),
+O('fert','Állítsa helyes sorrendbe a fertőtlenítő mosogatás fázisait!',['előáztatás','mosogatás','öblítés','fertőtlenítés','utóöblítés','szárítás'],K),
+// 81–145 Elsősegély
+M('elso','Válassza ki azokat az eseteket, amikor a balesetet szenvedett motoros fejéről a bukósisakot le kell venni!',['nem lélegzik a sérült','eszméletlen a sérült, és másképp nem megoldható a légút biztosítása','a sérült eszméletlen és hány'],['gerincsérülése van','sorozat bordatörése van','nyílt hasi sérülése van','combcsonttörése van'],K),
+S('elso','Válassza ki a kontaktusteremtésre vonatkozó helyes megállapítást!',['a sérültet fizikai és verbális ingerrel is meg kell próbálni kontaktusba vonni','a sérültet csak fizikai ingerrel (megrázás) kell megpróbálni kontaktusba vonni','a sérültet csak verbális ingerrel (megszólítás) kell megpróbálni kontaktusba vonni','elegendő, ha csak odalépünk a sérülthöz'],K),
+S('elso','Válassza ki, mit vizsgálunk a „hármas észleléssel”!',['légzés','pupillareakció','ébreszthetőség','tudat','szívműködés'],K),
+S('elso','Válassza ki, mi a teendő ájulás esetén!',['vigyük hűvös helyre és mielőbb fektessük le','mindenképpen tartsuk a beteget álló testhelyzetben','fektessük félig ülő helyzetbe a beteget, 40–60 fokban megemelt felsőtesttel','lógassuk a beteg lábát'],K),
+S('elso','Válassza ki az epilepszia meghatározását!',['a görcsrohammal járó eszméletvesztések egyik formája','tartós eszméletvesztéssel járó kórkép','rövid időtartamú eszméletzavar','egyik sem'],K),
+S('elso','Válassza ki a Wallace-féle 9-es szabályra vonatkozó helyes megállapítást!',['felnőtt esetében a jobb alsó végtag 18%','felnőtt esetében a törzs elöl 36%','felnőtt esetében a gáttájék 2%','gyermek esetében a bal alsó végtag 24%'],K),
+S('elso','Válassza ki a mentési lánc elemeinek helyes sorrendjét!',['felismerés, segélyhívás, elsősegély, mentőellátás, kórházi ellátás','segélyhívás, felismerés, elsősegély, mentőellátás, kórházi ellátás','felismerés, elsősegély, segélyhívás, mentőellátás, kórházi ellátás','felismerés, segélyhívás, mentőellátás, elsősegély, kórházi ellátás'],K),
+O('elso','Tegye helyes sorrendbe a mentési lánc elemeit!',['felismerés','segélykérés','elsősegélynyújtás','mentőellátás','szállítás','intézeti ellátás'],K),
+S('elso','Válassza ki a helyes megállapítást!',['A nem reagáló beteg légzését 10 másodpercig kell hármas érzékeléssel vizsgálni, és ez idő alatt legalább két légzőmozgást kell tapasztalni.','A nem reagáló beteg légzését 20 másodpercig kell hármas érzékeléssel vizsgálni, és ez idő alatt legalább egy légzőmozgást kell tapasztalni.'],K),
+M('elso','Válassza ki a helyes megállapításokat!',['A tálcafogás gerinc- és/vagy medencesérült kimentésére szolgál, amely optimális esetben négy segélynyújtó összehangolt munkáját igényli.','Az Esmarch-féle műfogás alkalmazása során törekedni kell arra, hogy az alsó fogsor a felső elé kerüljön.'],['Az Esmarch-féle műfogás alkalmazása során törekedni kell arra, hogy a felső fogsor az alsó elé kerüljön.','Amennyiben a beteg nem reagál a külső ingerekre, akkor az elsősegélynyújtó számára halottnak minősül.'],K),
+M('elso','Válassza ki az égésre/fagyásra vonatkozó helyes megállapításokat!',['Elsőfokú fagyás esetén a bőr színe eleinte sápadt, márványozott, a későbbiekben lilás, kékes.','Harmadfokú égés esetén a bőr piszkosszürke vagy fehéresszürke színű, megnyílt hólyagok láthatók.','Elsőfokú fagyás tünete a zsibbadás, tűszúrásszerű érzés, viszketés.','Másodfokú égés esetén a bőr rétegei közül a hám és az irha érintett.'],['Elsőfokú égés esetén a bőr rétegei közül a hám és az irha érintett.','Fagyási sérülés esetén azonnal meg kell kezdeni a sérült terület közvetlen melegítését, dörzsöléssel vagy meleg vízzel.','Elsőfokú égés esetén legalább 2 percig hideg vízzel kell hűteni a területet.','Az égés kiterjedésének megállapítására a Wallace-féle 5-ös szabályt alkalmazzuk.'],K),
+M('elso','Jelölje meg a rándulás, a ficam vagy a törés biztos jeleit!',['rendellenes helyzet','alakváltozás','kilátszó csontvég'],['fájdalom','duzzanat','haematoma','akadályozott mozgás'],K),
+MX('elso','Párosítsa a sérülést a leírásával!',[['ízületi ficam','Az ízületet alkotó csontvégek erőhatás következtében elmozdulnak, majd kóros helyzetben rögzülnek.'],['ízületi rándulás','Az ízületet alkotó csontvégek erőbehatásra eltávolodnak egymástól, de az erőbehatás megszűnésekor visszatérnek eredeti helyzetükbe.']]),
+CX('elso','Csoportosítsa a rándulás és a ficam felsorolt tüneteit!',['Rándulás tünete','Ficam tünete'],[['duzzanat',0],['kékes elszíneződés a bőrön',0],['az ízület mozgása korlátozott',0],['alakváltozás',1],['az ízület működése megszűnik / mozgásképtelenség',1],['az ízületi fej az ízületen kívül tapintható',1]]),
+S('elso','Válassza ki mellkaskompressziónál a mellkas lenyomási mélységét!',['kb. 5–6 cm','kb. 3–4 cm','kb. 4–5 cm','kb. 6–7 cm'],K),
+F('elso','Egészítse ki az alábbi mondatot!',['Az elsősegélynyújtás ',['azonnali','halasztott'],' beavatkozás sérülés, rosszullét esetén a ',['végleges','másodlagos'],' szakellátás megkezdése előtt.'],K),
+F('elso','Válassza ki a leírás alapján a sérülés fajtáját!',['Külső erő hatására az ízfelszínek eltávolodnak egymástól, de az erőbehatás megszűntekor az ízületi fej visszatér az ízületi árokba: ',['rándulás','ficam'],'. Erő hatására kimozdul az ízületi fej az ízületi árokból, és az erőbehatás megszűnte után nem tér vissza oda: ',['ficam','rándulás'],'.'],K),
+F('elso','Egészítse ki az alapfokú újraélesztéshez kapcsolódóan a földön fekvő sérült vizsgálatára vonatkozó mondatokat!',['A segélynyújtónak legelőször a(z) ',['biztonságos környezet megteremtéséről','mentőhívásról'],' kell gondoskodnia. Ezután az első lépés ',['az eszmélet/reakciókészség vizsgálata','a beteg megnyugtatása','a biztonságos környezet megteremtése'],'. Ha a sérült nem reagál, nem vonható kontaktusba, akkor azonnal ',['segítséget kell hívnunk','meg kell kezdeni az újraélesztést'],'. A következő teendő ',['a légutak felszabadítása, szabaddá tétele','a légzésvizsgálat elvégzése'],'. A légzésvizsgálatot ',['10','5','15','20'],' másodpercig kell végezni. Normál légzés esetén a sérültet ',['stabil oldalfekvésben','hanyatt fektetve'],' kell elhelyezni, és folyamatosan ellenőrizni kell a ',['légzését','pulzusát'],' a mentő megérkezéséig. Ha az elsősegélynyújtó tanult újraélesztést, a mellkaskompressziókat célszerű szájból ',['szájba','orrba'],' történő lélegeztetéssel kiegészíteni. Mellkaskompressziót felnőtteknél körülbelül ',['5–6','3–4','6–7'],' cm mélységben, ',['100–120','90–100','120–130'],'/perc frekvenciával kell végezni. A kompresszió és lélegeztetés aránya ',['30:2','15:2','30:10','30:15'],'.'],K),
+O('elso','Állítsa helyes sorrendbe az alapfokú újraélesztéshez kapcsolódó, a földön fekvő sérült vizsgálatának lépéseit!',['biztonságos környezet megteremtése','az eszmélet/reakciókészség vizsgálata','segítséghívás, amennyiben a sérült nem reagál, nem vonható kontaktusba','a légutak felszabadítása/szabaddá tétele','10 másodpercig légzésvizsgálat'],K),
+M('elso','Válassza ki, szabályos mentőhíváskor mely lényeges információkat kell közölni a mentésirányítóval!',['Mi történt (rövid ismertetés)','Hol történt (pontos cím)','Megközelítés leírása','Hány sérült van','Állapotuk súlyossága','Műszaki mentés szükséges-e'],['A telefonáló életkora','Hány autó van összesen a helyszínen','Hány segélynyújtó van a helyszínen','Milyen a helyszínen az időjárás','A sérült neme','A sérült életkora'],K),
+CX('elso','Csoportosítsa a ficamra, illetve a rándulásra vonatkozó leírásokat!',['Ficam','Rándulás'],[['Az ízületi sérülések súlyosabb formája.',0],['A fájdalom a behatás pillanatában rendkívül erős és folyamatosan fennáll.',0],['A feszülő ízületi tok rendellenes helyzetben rögzíti a végtagot.',0],['Erőbehatás megszűnése után az ízületi fej visszatér az ízületi árokba.',1],['A behatás pillanatában jelentkező fájdalom átmenetileg csökken, majd ismét visszatér.',1],['Néhány óra alatt az ízület erősen megduzzad, lilásan elszíneződik.',1]]),
+MX('elso','Párosítsa az egyes sebtípusokat a jellemzőikkel!',[['Zúzott seb','Zegzugos, tátongó sebszél, sokszor szennyezett.'],['Szúrt seb','A szúrcsatorna mélysége feltárás nélkül nem állapítható meg, a sérülés lehet behatoló és áthatoló.'],['Szakított seb','Egyenetlen, nagy tátongó sebszélek, bőséges vérzés, csontok, idegek is sérülhetnek.'],['Harapott seb','Látható fognyomok, roncsolt sebszélek, esetleg lágyrészhiány, mélysége változó.'],['Lőtt seb','Lehet behatoló vagy áthatoló, bemeneti nyílás mindig van, kimeneti nyílás, ha van, mindig nagyobb.'],['Horzsolt seb','A bőr hámrétege sérül.']]),
+CX('elso','Sorolja az égés fokozataihoz a rájuk jellemző tüneteket!',['I. fokú','II. fokú','III. fokú','IV. fokú'],[['Pár nap alatt spontán gyógyul.',0],['A bőr nyálkahártyája kipirult, duzzadt és fájdalmas.',0],['Savóval teli bullák jelennek meg.',1],['Lehet egy nagyobb, de akár több bulla is.',1],['Folyamatos váladékozás.',2],['A bőr színe piszkosszürke.',2],['Elszenesedés.',3],['Mélyebb szövetek zsugorodnak (csont, izom).',3]]),
+M('elso','Válassza ki, mely esetekben kell a beteget/sérültet félig ülő helyzetbe helyezni!',['Eszméleténél lévő mellkasi sérült esetében.','Tüdőasztma miatt kialakuló nehézlégzésnél.'],['Fedett hasi sérülés esetén.','Erősen vérző arckoponya-sérültnél.'],K),
+M('elso','Válassza ki azokat a tevékenységeket, amelyeket TILOS alkalmazni az elsősegélynyújtónak égési sérült ellátása esetén!',['A bőrbe égett ruha kitépése a sebből.','Szükség esetén a sérülés jéggel történő hűtése.','Krém vagy sebhintőpor alkalmazása a sebben a fertőzés megelőzésére, a sebgyógyulás elősegítésére.'],['Az égett testfelület szabaddá tétele, amennyiben lehetséges.','Az égett bőrfelület hideg folyóvízzel történő hűtése legalább 15–20 percig.','Hűtés után az égett felületre laza, steril fedőkötés felhelyezése.','Nagy kiterjedésű égésnél a felület fedésére tiszta, vasalt lepedő használata.'],K),
+M('elso','Válassza ki a helyes megállapításokat!',['Gerincsérülés gyanúja esetén a fej mozgatása helyett az áll előreemelésével lehet a szabad légutat biztosítani.','Hármas értékeléssel vizsgáljuk a légzés meglétét.','Mentőhívás során adja meg a segélykérő a telefonszámát, mert fontos lehet, ha további információ szükséges.','Életveszélyes állapotra utal a szürkéssápadt-fakófehér verejtékes arc, a szapora pulzus.'],['Elsősegélynyújtás során a légzés vizsgálata 1 percig tart.','Magyarországon a 107-es vagy az egységes európai 112-es hívószámon lehet a mentőket riasztani.','A bukósisakot minél hamarabb eltávolítjuk a motoros sérült fejéről, mert csak így tudjuk megállapítani, hogy van-e légzése.'],'A megoldókulcs szerint (a 107-es a rendőrség száma).'),
+MX('elso','Párosítsa a fogalmat a hozzá tartozó meghatározással!',[['Rautek-féle műfogás','Eszméletlen, mozgásképtelen sérült biztonságos kimentésére alkalmazzuk.'],['tálcafogás','Súlyos sérülés gyanúja esetén alkalmazzuk, ha a sérültet el kell távolítani a veszélyzónából.'],['stabil oldalfekvés','Célja a légutak szabaddá tételével és szabadon tartásával a sérültet megvédeni a fulladástól.'],['ALS','Eszközös, emelt szintű újraélesztés.'],['félig ülő helyzet','A felsőtestet 40–60°-ra kell megemelni.'],['AED','Külső automata defibrillátor.']]),
+M('elso','Válassza ki a helyes válaszokat!',['Marószermérgezés esetén a lenyelt, gyomorba került marószert tilos kihánytatni.','A savmérgezés a bőrön és nyálkahártyákon pörkképződést okoz.','Klórgázmérgezésnél helyi nyálkahártya-izgalom, a gégefedő, a hörgők görcse és tüdővizenyő alakulhat ki.'],['Gyógyszermérgezés esetén az eszméletlen beteget meghánytatjuk.','Szén-monoxid-mérgezésnél a gázmérgezettet minden körülmények között azonnal ki kell mentenie az elsősegélynyújtónak.','A gombamérgezések lappangási ideje 48–72 óra között van.'],K),
+M('elso','Válassza ki az igaz állításokat!',['Defibrilláláshoz a beteg száraz alapon feküdjön, mellkasa legyen száraz.','A sebellátás legfontosabb célja a további vérvesztés megakadályozása.','Vállficam esetén a felső végtag kórosan rögzül.'],['Orrvérzés esetén a beteg nyugalomba helyezése után hajtsa hátra a fejét.','Hasi sérülés esetén az eszméletlen beteget stabil oldalfekvésbe kell helyezni.','Csonkolásos sérülés esetén a leszakadt testrészt lefagyasztva tároljuk.'],K),
+S('elso','Válassza ki a helyes választ!',['Égési sérülést okozhat lánghatás, forró folyadék, forró fém, súrlódás.','A sebbe égett ruhát egy határozott mozdulattal el kell távolítani.','Égés esetén sebhintőport kell használni a fertőtlenítéshez.','Égési sérülést tejföllel hatékonyan lehet hűteni.','A hideg vízzel történő hűtés ideje 1–2 perc.','Égési sérülésre közvetlenül jeget kell helyezni, azzal kell hűteni.'],K),
+M('elso','Válassza ki a súlyos állapotra utaló riasztó jeleket, tüneteket!',['légzés hiánya','keringés hiánya','eszméletlenség','görcsroham','igen nagyfokú fájdalom','igen magas láz','erős vérzés','fulladás','gyér vagy szapora, könnyen elnyomható pulzus','sápadt, beesett arc, szederjes ajkak'],['horzsolt seb mindkét alkaron','lábszár nyílt törése','két lábujj amputációja','térd- és vállficam','zúzott seb a fejen','pulzus 90–100/min','hányinger, hányás'],K),
+CX('elso','Csoportosítsa az alábbi jellemzőket az egyes vérzéstípusokhoz!',['Artériás vérzés','Vénás vérzés','Kapilláris vérzés'],[['Élénkpiros, a szív összehúzódásának megfelelően pulzálva, spriccelve ürül.',0],['Általában mélyebben fekvő ér sérül, melyből nagy nyomással ürül a vér.',0],['Vörös (sötétvörös), egyenletesen folyó vérzés.',1],['Felszínesen futó ér sérülése okozza, lehet erős vérzés is.',1],['Speciális vérzéscsillapításra nincs szükség, a sebellátás elegendő.',2],['Szivárgó, enyhe vérzés.',2]]),
+CX('elso','Párosítsa az égési sérülések fokozatait a nekik megfelelő állításokkal!',['Elsőfokú','Másodfokú','Harmadfokú','Negyedfokú'],[['A sérülés csak a bőr felső rétegét érinti, ilyen sérülések gyakran napozás vagy túlzásba vitt szoláriumozás esetén is keletkezhetnek.',0],['A leggyakoribb és legenyhébb égési sérülés. Az égett területen a bőr piros és rendkívül érzékeny.',0],['Erős fájdalommal jár, duzzanatok, hólyagok jelenhetnek meg a bőrön. Az égés a bőr második rétegét is érinti.',1],['Az összes bőrréteg átégett, és az égés elérte a mélyebben fekvő szöveteket.',2],['A hólyagok megnyíltak, az égési felszín piszkosszürke vagy halvány, viaszos hatású, maga a seb sok esetben nem fáj az idegek elhalása következtében.',2],['A szövetek elszenesednek, és az égés egészen az izmokig, idegekig és csontokig terjed.',3],['A legsúlyosabb égési sérülés. Az idegek elhalása következtében az égési seb a legtöbb esetben fájdalmatlan.',3]]),
+MX('elso','Párosítsa a sebtípust a hozzá illő leírással!',[['Vágott seb','Éles eszköz a testre merőlegesen hatva okozza a sebet, melynek szélei egyenesek, minimális környéki szövetroncsolódás jellemzi. Általában erős vérzés kíséri. Az elfertőződés ritka, jó gyógyulási hajlam jellemzi.'],['Horzsolt seb','Az egyik leggyakoribb sebtípus, melyet a bőr felületével párhuzamos mechanikai hatás okoz. A sérülés mélysége csekély, nagy a fertőzésveszély, a gyógyulás gyors és általában hegmentes.']]),
+O('elso','Állítsa sorrendbe a Rautek-féle műfogás (kimentés) kivitelezésének lépéseit egy gépkocsiban ülő sérült esetén!',['A helyszín biztosítása, gépkocsi befékezése, gyújtás levétele, segélykérés.','A biztonsági öv kikapcsolása, majd első, gyors állapotfelmérés (eszmélet, légzés, keringés jelei).','A műfogás alkalmazhatóságának felmérése (van-e kizáró ok).','A sérült vizsgálata, nincs-e beszorulva. Az üléstámla hátradöntése.','A sérült elfordítása a csípőjénél fogva annyira, hogy a háta megközelíthető legyen.','Nyújtott karokkal mindkét hónalj alatt átnyúlva megragadjuk két kézzel az egyik (ép) alkarját, és vízszintesen a mellkasához szorítjuk.','A sérültet kiemeljük, a hozzá közelebbi combunkra húzva megtámasztjuk.','Apró lépésekkel elvisszük a sérültet a veszélyzónából.'],K),
+M('elso','Válassza ki a gerincsérülés lehetséges tüneteit!',['fájdalom a gerinc vonalában','a gerinc deformitása','a sérülés helyétől lefelé érzéskiesés, végtagbénulás'],['véres vizelet','heves hasi fájdalom','fülből vagy orrból világos, agyvízzel kevert vér ürül','a szem körül „pápaszemszerű” vérömleny alakul ki'],K),
+M('elso','Válassza ki az ájulás lehetséges tüneteit!',['szédülés','sápadtság','fülzúgás','látászavar'],['kipirult arc','hidegrázás','fulladás','hányinger, hányás','láz'],K),
+M('elso','Válassza ki a helyes megállapításokat!',['AED-használattal megvalósítható a korai defibrillálás még a mentő kiérkezése előtt.','Az AED megérkezéséig folytatni kell az újraélesztést, de amint megérkezett az AED, azt azonnal használni kell.','Fontos, hogy a segélynyújtók figyeljenek az AED hangutasításaira, és azokra azonnal reagáljanak (különösen fontos a mellkaskompresszió újrakezdése).'],['AED-t a mentő kiérkezése előtt laikus önállóan nem, csak a mentésirányító utasítására használhat.','Ha van a közelben AED, akkor az újraélesztést csak az elektródák felhelyezését követően szabad megkezdeni.','Az AED hangutasításait csak akkor kell figyelembe venni, ha az újraélesztést végző tud rá figyelni.'],K),
+O('elso','Tegye helyes sorrendbe a BLS lépéseit!',['a helyszín biztonságának felmérése','a beteg reakciókészségének felmérése megszólítással, két vállának óvatos megrázásával','légzésvizsgálat','mentőhívás','30 mellkaskompresszió','2 befúvásos lélegeztetés'],K),
+MX('elso','Párosítsa az alábbi sérüléseket az alkalmazható kötéstípussal!',[['erős vérzés az alkaron','nyomókötés'],['orrvérzés','parittyakötés'],['a hajas fejbőr sérülése','sapkakötés'],['horzsolás, gyenge vérzés a felkaron','fedőkötés']]),
+O('elso','Állítsa sorrendbe a sebellátás menetét!',['a sérült nyugalomba helyezése (szükség esetén a végtag felemelése)','a seb környékének megtisztítása','a sebszélek fertőtlenítése','a seb steril fedése, a kötés rögzítése'],K),
+M('elso','Válassza ki az alacsony vércukorszint jellemző tüneteit!',['émelygő éhségérzet','sápadtság, hideg verejtékezés','remegés','szédülés'],['kiszáradt száj','szapora légzés','száraz, viszkető bőr','szomjúságérzet','gyakori vizelés'],K),
+O('elso','Állítsa sorrendbe a légúti idegentest esetén javasolt ellátás lépéseit!',['biztonságos környezet kialakítása','az illető megnyugtatása','köhögésre biztatás','háti ütések alkalmazása','hasi lökések (Heimlich-féle műfogás) alkalmazása'],K),
+S('elso','Légúti idegentest eltávolítása esetén mely területen végezzük a háti ütéseket?',['a lapockák között','a lapockák alatt','a lapockáktól felfelé'],K),
+S('elso','Légúti idegentest eltávolítása esetén maximum hány háti ütést javasolt alkalmazni?',['5','3','10','15'],'A megoldókulcs szerint 5. (A feladatlapon ez kiegészítendő kérdés, a választási lehetőségeket az app adja hozzá.)'),
+M('elso','Válassza ki, hogy az égett területek felmérésére szolgáló 9-es szabály szerint melyek felelnek meg 9%-nak felnőttek esetén!',['a fej','egy felső végtag','alsó végtag a térdtől lefelé'],['a gáttájék','a mellkas','egy alsó végtag','a mellkas háti felszíne'],K),
+S('elso','Válassza ki, milyen frekvenciával kell végezni újraélesztés során a mellkaslenyomásokat felnőtteknél!',['100–120/perc','70–80/perc','80–90/perc','120–140/perc'],K),
+S('elso','Válassza ki az elsőfokú égés NEM tipikus tünetét!',['piszkosszürke sebfelület','feszes bőr','bőrpír','fájdalom'],K),
+S('elso','Válassza ki az egységes európai segélyhívószámot!',['112','104','105','911'],'A megoldókulcs szerint 112. (A választási lehetőségeket az app adja hozzá.)'),
+S('elso','Válassza ki, mennyi ideig végzi a légzésvizsgálatnál alkalmazott hármas érzékelést!',['maximum 10 másodperc','maximum 5 másodperc','maximum 15 másodperc','maximum 20 másodperc','maximum 30 másodperc'],K),
+S('elso','Válassza ki, hány mellkaskompressziót kell végezni felnőttek újraélesztésekor (egy ciklusban)!',['30','15','10','5'],'A megoldókulcs szerint 30. (A választási lehetőségeket az app adja hozzá.)'),
+S('elso','Válassza ki a hármas érzékelés jelentését!',['Érzem, látom, hallom.','Érzem, tapintom, hallom.','Tapintom, látom, hallom.','Látom, hallom, tapintom.'],K),
+IH('elso','Döntse el, hogy az alapfokú újraélesztésre vonatkozó kijelentések igazak vagy hamisak!',[['A segélynyújtónak legelőször gondoskodnia kell a biztonságos környezet megteremtéséről.',1],['A segélynyújtónak legelőször a segítséghívásról kell gondoskodnia.',0],['A mellkaskompresszió–befúvás aránya 15:2.',0],['A félautomata defibrillátor használata előtt 5 percig újraélesztést kell végezni.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['A légzésvizsgálatot 10 másodpercig kell végezni.',1],['A légzésvizsgálatot 20 másodpercig kell végezni.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['A mellkaskompresszió–befúvás arány 30:2.',1],['A mellkaskompresszió–befúvás arány 2:15.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['Ha a beteg eszméletlen és normál légzést tapasztalunk, akkor hanyatt fekve kell elhelyezni, és folyamatosan ellenőrizni kell a légzését.',0],['Ha a beteg eszméletlen és normál légzést tapasztalunk, akkor stabil oldalfekvésben kell elhelyezni, és folyamatosan ellenőrizni kell a légzését.',1]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['Ha az elsősegélynyújtó tanult újraélesztést, a mellkaskompressziókat célszerű szájból szájba történő lélegeztetéssel is kiegészíteni.',1],['Ha az elsősegélynyújtó tanult újraélesztést, sok esetben elegendő a szájból szájba történő lélegeztetés hatékony végzése.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['Mellkaskompressziót felnőtteknél körülbelül 5–6 cm mélységben, 100–120/perces frekvenciával kell végezni.',1],['Mellkaskompressziót felnőtteknél körülbelül 4–5 cm mélységben, 100–120/perces frekvenciával kell végezni.',0],['Mellkaskompressziót felnőtteknél körülbelül 5–6 cm mélységben, 90–100/perces frekvenciával kell végezni.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['A kompresszió és lélegeztetés aránya 30:2.',1],['A kompresszió és lélegeztetés aránya 15:1.',0],['A kompresszió és lélegeztetés aránya 30:5.',0]]),
+IH('elso','Döntse el, hogy az alapfokú újraélesztéshez kapcsolódó mondatok igazak vagy hamisak!',[['Újraélesztéskor a mellkaskompressziónál a mellkas lenyomási mélysége kb. 3–4 cm.',0],['Újraélesztéskor a mellkaskompressziónál a mellkas lenyomási mélysége kb. 5–6 cm.',1]]),
+S('elso','Válassza ki az égési sérülés fokát, ha a bőr piros és rajta hólyagok láthatók!',['II. fokú','I. fokú','III. fokú','IV. fokú'],K),
+O('elso','Súlyos sérült esetében állítsa sorrendbe a teendőket!',['biztonság megteremtése','baleseti mechanizmus értékelése, elemzése','súlyos sérülés feltételezése','oldalról kitámasztás','a beteg mellett maradva pszichés támogatás'],K),
+MX('elso','Párosítsa a megjelölt fektetési módokat az indikációval!',[['félig ülő helyzet','mellkassérült'],['hanyatt fekvés, enyhén megemelt felsőtest','eszméletén lévő fejsérült'],['stabil oldalfektetés','eszméletlen, lélegző beteg'],['hanyatt fekvés térdben felhúzott alsó végtagokkal, enyhén emelt fejjel','hasi sérült'],['talált helyzetben rögzítés','súlyos sérült']]),
+IH('elso','Döntse el, hogy igazak vagy hamisak az alábbi állítások!',[['Súlyos sérülés esetén csak két segélynyújtó mozgathatja a beteget.',0],['Súlyos sérülés lehetőségét feltételezhetjük a baleseti mechanizmusból.',1],['Súlyos sérülést kell feltételezni magasból esést követően.',1],['Eszméletén lévő súlyos sérültet stabil oldalfektetésbe kell helyezni.',0]]),
+S('elso','Válassza ki a HAMIS állítást!',['súlyos sérült biztonságos mozgatására alkalmazható a Rautek-féle műfogás','súlyos sérült esetében fontos a nyaki gerinc védelme','súlyos sérült mozgatására alkalmas a tálcafogás','súlyos sérültet lehetőség esetén tilos mozgatni'],K),
+// 146–150 Katasztrófa
+M('kat','Válassza ki az egészségügyi katasztrófahelyzetre vonatkozó helyes megállapításokat!',['az ellátandók igényei és az ellátók kapacitási képességei között várhatóan tartós, nagyfokú aránytalanság áll fenn','az esemény kiterjedése miatt rendkívüli erőforrások mozgósítását igényli','az áldozatok száma, elhelyezkedése, a sérüléseik típusa vagy súlyossága miatt rendkívüli erőforrások mozgósítását igényli'],['az ellátók kapacitási képességei arányosak az ellátandók igényeivel','az esemény nem igényli rendkívüli erőforrások mozgósítását','az áldozatok száma csekély, de a sérüléseik súlyosak'],K),
+M('kat','Válassza ki a feltehetően tömeges eseményt jelentő eseteket!',['öt gépkocsi ütközött össze','turistabusz szakadékba zuhan','népszerű együttes koncertjén történt robbanás'],['motoros kerékpárossal ütközött','siklóernyős lezuhant','gyalogosgázolás'],K),
+CX('kat','Csoportosítsa a katasztrófákat eredetük szerint!',['Természeti eredetű','Civilizációs eredetű'],[['földcsuszamlás',0],['árvíz',0],['tájfun',0],['háború',1],['járvány',1],['sugárbaleset',1],['vörösiszap-árvíz',1]]),
+CX('kat','Csoportosítsa a katasztrófákat hely szerint!',['helyi','térségi','országos','nemzetközi'],[['gázszivárgás egy 10 emeletes épületben',0],['a helyi iskolabusz felborul',0],['vörösiszap-árvíz',1],['sugárbaleset a Paksi atomerőműben',1],['dunai árvíz',2],['Covid–19-járvány',2],['a Földközi-tengeren két tartályhajó összeütközik',3],['2004-es indiai-óceáni cunami',3]]),
+O('kat','Tegye helyes sorrendbe a katasztrófák elleni védekezés szakaszait!',['Megelőzés','Védekezés','Helyreállítás'],K),
+];
+
 // ---------- HALLGATÁS: felolvasható tananyag ----------
 const LESSONS=[
 {id:'ana-ker',subj:'ana',tp:'ker',title:'Keringési rendszer és a vér',sections:[
@@ -926,12 +1098,14 @@ const SUBJ={
   ana:{name:'Anatómia–élettan',short:'Anatómia',bank:ANA,desc:'Bevezetés és mozgásrendszer · A keringési rendszer és a vér',
     topics:{mozg:'Bevezetés és mozgásrendszer',ker:'Keringési rendszer és a vér'}},
   bm:{name:'Betegmegfigyelés',short:'Betegmegfigyelés',bank:BM,desc:'Tünetek, vizsgálómódszerek, életjelek, fájdalom, széklet és vizelet',
-    topics:{alap:'Alapok, vizsgálómódszerek',elet:'Életjelek',fajd:'Fájdalom',urit:'Széklet és vizelet'}}
+    topics:{alap:'Alapok, vizsgálómódszerek',elet:'Életjelek',fajd:'Fájdalom',urit:'Széklet és vizelet'}},
+  agv:{name:'Betegmegfigyelés és vitális paraméterek',short:'Ágazati vizsga',bank:AGV,group:'agv',desc:'OKFŐ ágazati alapvizsga – központi feladatbank, megoldókulccsal',
+    topics:{alap:'Alapok, tünetek, testalkat',fajd:'Fájdalom, tudatállapot',valad:'Testváladékok',test:'Időskor, testméretek',vital:'Vitális paraméterek',fert:'Fertőtlenítés',elso:'Elsősegély',kat:'Katasztrófa'}}
 };
 for(const k in SUBJ){SUBJ[k].bank.forEach((q,i)=>q.id=k+'-'+i)}
 const figHTML=(I,sticky)=>I.img?`<figure class="fig ${sticky?'sticky':''}"><img src="${IMG[I.img]}" alt="Számozott ábra"></figure>`:'';
-const TYPE={s:'Feleletválasztás',m:'Több helyes válasz',tf:'Igaz vagy hamis?',ma:'Párosítás',ord:'Sorrendbe rakás',c:'Csoportosítás'};
-const HINT={s:'Egy helyes válasz van.',m:'Jelölje meg az összes helyes választ – de csak azokat! A rossz jelölés pontot von le.',tf:'Döntse el, igaz vagy hamis az állítás.',ma:'Minden sorhoz válassza ki a hozzá tartozó leírást. Egy leírás felesleges lehet.',ord:'Koppintson az elemekre a helyes sorrendben. Törléshez koppintson a ✕-re.',c:'Sorolja be az elemeket a megfelelő csoportba.'};
+const TYPE={f:'Kiegészítés',s:'Feleletválasztás',m:'Több helyes válasz',tf:'Igaz vagy hamis?',ma:'Párosítás',ord:'Sorrendbe rakás',c:'Csoportosítás'};
+const HINT={f:'Minden üres helyre válassza ki a helyes kifejezést.',s:'Egy helyes válasz van.',m:'Jelölje meg az összes helyes választ – de csak azokat! A rossz jelölés pontot von le.',tf:'Döntse el, igaz vagy hamis az állítás.',ma:'Minden sorhoz válassza ki a hozzá tartozó leírást. Egy leírás felesleges lehet.',ord:'Koppintson az elemekre a helyes sorrendben. Törléshez koppintson a ✕-re.',c:'Sorolja be az elemeket a megfelelő csoportba.'};
 const GRADES=[[86,'Jeles (5)'],[71,'Jó (4)'],[56,'Közepes (3)'],[41,'Elégséges (2)'],[0,'Elégtelen (1)']];
 
 // ---------- segédek ----------
@@ -941,7 +1115,7 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 let STORE=load('vg-store',{seen:{ana:[],bm:[]},hist:{ana:[],bm:[]}});
-STORE.seen=STORE.seen||{ana:[],bm:[]};STORE.hist=STORE.hist||{ana:[],bm:[]};
+STORE.seen=STORE.seen||{};STORE.hist=STORE.hist||{};STORE.wrong=STORE.wrong||{};for(const k of ['ana','bm','agv']){STORE.seen[k]=STORE.seen[k]||[];STORE.hist[k]=STORE.hist[k]||[];STORE.wrong[k]=STORE.wrong[k]||[]}
 const persist=()=>save('vg-store',STORE);
 const gradeOf=p=>GRADES.find(g=>p>=g[0])[1];
 const fmtTime=s=>{const m=Math.floor(s/60),r=s%60;return m+':'+String(r).padStart(2,'0')};
@@ -959,6 +1133,7 @@ function makeInst(tpl){
     const rest=tpl.pairs.filter(p=>!used.has(p[1])).map(p=>p[1]).filter((v,i,a)=>a.indexOf(v)===i);
     const extra=tpl.allChoices?rest:shuffle(rest).slice(0,1);
     I.rows=pick.map(p=>({l:p[0],r:p[1]}));I.choices=shuffle([...pick.map(p=>p[1]),...extra]);I.ans=I.rows.map(()=>'');I.max=I.rows.length}
+  else if(tpl.t==='f'){I.segs=tpl.parts.map(p=>Array.isArray(p)?{opts:shuffle(p),c:p[0]}:p);I.nb=I.segs.filter(s=>typeof s!=='string').length;I.ans=Array(I.nb).fill('');I.max=I.nb}
   else if(tpl.t==='ord'){
     let sh;do{sh=shuffle(tpl.items)}while(sh.join('|')===tpl.items.join('|')&&tpl.items.length>1);
     I.items=tpl.items.slice();I.shown=sh;I.ans=[];I.max=tpl.items.length}
@@ -976,6 +1151,7 @@ function scoreOf(I){
     case'ma':return I.rows.reduce((s,r,i)=>s+(I.ans[i]===r.r?1:0),0);
     case'ord':return I.items.reduce((s,x,i)=>s+(I.shown[I.ans[i]]===x?1:0),0);
     case'c':return I.items.reduce((s,x,i)=>s+(I.ans[i]===x.g?1:0),0);
+    case'f':{let k=0,s=0;I.segs.forEach(x=>{if(typeof x!=='string'){if(I.ans[k]===x.c)s++;k++}});return s}
   }
 }
 function touched(I){
@@ -983,11 +1159,13 @@ function touched(I){
   if(I.t==='m'||I.t==='ord')return I.ans.length>0;
   if(I.t==='ma')return I.ans.some(Boolean);
   if(I.t==='c')return I.ans.some(v=>v!=null);
+  if(I.t==='f')return I.ans.some(Boolean);
 }
 function complete(I){
   if(I.t==='ma')return I.ans.every(Boolean);
   if(I.t==='ord')return I.ans.length===I.items.length;
   if(I.t==='c')return I.ans.every(v=>v!=null);
+  if(I.t==='f')return I.ans.every(Boolean);
   return touched(I);
 }
 
@@ -999,10 +1177,11 @@ function pickQuestions(subj,topics,n,fromIds){
   const bank=SUBJ[subj].bank;
   if(fromIds)return shuffle(bank.filter(q=>fromIds.includes(q.id)));
   const pool=bank.filter(q=>!topics||topics.includes(q.tp));
-  const seen=new Set(STORE.seen[subj]);
-  const fresh=shuffle(pool.filter(q=>!seen.has(q.id))), old=shuffle(pool.filter(q=>seen.has(q.id)));
+  const seen=new Set(STORE.seen[subj]), wrong=new Set(STORE.wrong[subj]||[]);
+  const bad=shuffle(pool.filter(q=>wrong.has(q.id)));
+  const fresh=shuffle(pool.filter(q=>!seen.has(q.id)&&!wrong.has(q.id))), old=shuffle(pool.filter(q=>seen.has(q.id)&&!wrong.has(q.id)));
   const take=n==='all'?pool.length:Math.min(n,pool.length);
-  return [...fresh,...old].slice(0,take);
+  return shuffle([...bad,...fresh,...old].slice(0,take));
 }
 function startExam(fromIds){
   const qs=pickQuestions(cfg.subj,cfg.topics,cfg.len,fromIds);
@@ -1017,6 +1196,7 @@ function submitExam(){
   if(seen.size>=SUBJ[subj].bank.length){STORE.seen[subj]=EX.items.map(I=>I.id)}else STORE.seen[subj]=[...seen];
   const tps={};EX.items.forEach(I=>{const t=tps[I.tp]||(tps[I.tp]=[0,0]);t[0]+=scoreOf(I);t[1]+=I.max});
   STORE.hist[subj].unshift({d:EX.end,pct:EX.pct,pts,max,n:EX.items.length,sec:Math.round((EX.end-EX.start)/1000),tps,retry:!!EX.retry,nok:EX.items.filter(I=>scoreOf(I)===I.max).length});
+  {const ids=new Set(EX.items.map(I=>I.id));const w=new Set((STORE.wrong[subj]||[]).filter(id=>!ids.has(id)));EX.items.forEach(I=>{if(scoreOf(I)<I.max)w.add(I.id)});STORE.wrong[subj]=[...w]}
   STORE.hist[subj]=STORE.hist[subj].slice(0,500);persist();
   rvFilter=EX.items.some(I=>scoreOf(I)<I.max)?'bad':'all';
   saveEx();view='result';render(true);
@@ -1024,6 +1204,7 @@ function submitExam(){
 
 // ---------- nézetek ----------
 const ecg='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M0 36h40l6-10 6 10h10l5 -30 7 46 6-22h18l5-6 6 6h41"/></svg>';
+const cross='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M66 6h18v16h16v18H84v16H66V40H50V22h16z"/></svg>';
 const bone='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M30 20c-8-10-24-2-16 8-8 10 8 18 16 8h90c8 10 24 2 16-8 8-10-8-18-16-8z"/></svg>';
 
 function homeView(){
@@ -1032,18 +1213,20 @@ function homeView(){
     const S=SUBJ[k],h=STORE.hist[k],last=h[0],best=h.length?Math.max(...h.map(x=>x.pct)):null;
     const unseen=S.bank.length-new Set(STORE.seen[k]).size;
     return `<button class="subj" data-s="${k}" data-act="open" data-k="${k}">
-      ${k==='ana'?bone:ecg}
-      <span class="tag"><span class="dot"></span><span class="eyebrow">Tantárgy</span></span>
+      ${k==='ana'?bone:k==='agv'?cross:ecg}
+      <span class="tag"><span class="dot"></span><span class="eyebrow">${S.group?'Ágazati alapvizsga · OKFŐ':'Tantárgy'}</span></span>
       <h2>${S.name}</h2>
       <p class="desc">${S.desc}</p>
-      <span class="meta"><span><b class="num">${S.bank.length}</b> kérdés</span><span><b class="num">${unseen}</b> még nem volt</span>${last?`<span>utolsó: <b class="num">${last.pct}%</b></span><span>legjobb: <b class="num">${best}%</b></span>`:''}</span>
+      <span class="meta"><span><b class="num">${S.bank.length}</b> kérdés</span><span><b class="num">${unseen}</b> még nem volt</span>${(STORE.wrong[k]||[]).length?`<span><b class="num">${STORE.wrong[k].length}</b> hibás vár ismétlésre</span>`:''}${last?`<span>utolsó: <b class="num">${last.pct}%</b></span><span>legjobb: <b class="num">${best}%</b></span>`:''}</span>
       <span class="go">Vizsga indítása</span>
     </button>`};
   const resume=EX&&!EX.done?`<div class="panel" style="margin-top:16px"><div><span class="eyebrow">Félbehagyott vizsga</span><div style="font-weight:700;margin-top:2px">${SUBJ[EX.subj].name} · ${EX.items.filter(touched).length}/${EX.items.length} megválaszolva</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" data-act="resume" style="background:var(--${EX.subj});border-color:var(--${EX.subj})">Folytatás</button><button class="btn ghost" data-act="discard">Elvetés</button></div></div>`:'';
   return `<div class="wrap">
-    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><div class="chips" style="margin-top:8px"><button class="chip" data-act="stats">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length} kitöltés</button><button class="chip" data-act="listen">🎧 Hallgatás</button></div></header>
+    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><div class="chips" style="margin-top:8px"><button class="chip" data-act="stats">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length+STORE.hist.agv.length} kitöltés</button><button class="chip" data-act="listen">🎧 Hallgatás</button></div></header>
     ${resume}
     <div class="subjects">${card('ana')}${card('bm')}</div>
+    <h2 class="sect">Ágazati vizsga</h2>
+    <div class="subjects" style="margin-top:10px">${card('agv')}</div>
     <p class="foot">Az eredményeid és a már látott kérdések csak ezen az eszközön tárolódnak. ${confirmReset?`<button class="linkbtn" data-act="reset2" style="color:var(--bad)">Biztosan törlöd? Koppints újra.</button>`:`<button class="linkbtn" data-act="reset">Statisztika törlése</button>`}</p>
   </div>`;
 }
@@ -1083,6 +1266,8 @@ function qBody(I,qi){
   }else if(I.t==='ord'){
     h=`<ol class="ordlist">${I.ans.length?I.ans.map((ix,p)=>`<li><span class="tx">${esc(I.shown[ix])}</span><button data-act="ordrm" data-p="${p}" aria-label="Eltávolítás">✕</button></li>`).join(''):''}</ol>${I.ans.length?'':'<div class="ordempty">Koppintson lent az elsőnek következő elemre.</div>'}
     <div class="ordpick">${I.shown.map((x,ix)=>`<button data-act="ordadd" data-ix="${ix}" ${I.ans.includes(ix)?'disabled':''}>${esc(x)}</button>`).join('')}</div>`;
+  }else if(I.t==='f'){
+    let k=0;h=`<div class="panel ftext">${I.segs.map(x=>{if(typeof x==='string')return esc(x);const i=k++;return `<select id="f-${qi}-${i}" data-act="fsel" data-i="${i}" class="${I.ans[i]?'set':''}"><option value="">…válassz…</option>${x.opts.map(o=>`<option ${I.ans[i]===o?'selected':''}>${esc(o)}</option>`).join('')}</select>`}).join('')}</div>`;
   }else if(I.t==='c'){
     h=`<div class="rows">${I.items.map((it,i)=>`<div class="mrow"><span class="l">${esc(it.x)}</span><div class="seg">${I.groups.map((g,gi)=>`<button data-act="cls" data-i="${i}" data-g="${gi}" aria-pressed="${I.ans[i]===gi}">${esc(g)}</button>`).join('')}</div></div>`).join('')}</div>`;
   }
@@ -1126,6 +1311,8 @@ function reviewItem(I,qi){
     a=I.rows.map((r,i)=>I.ans[i]===r.r?line('good','✓',r.l+' → '+r.r):line('wrong','✗',r.l+' → '+(I.ans[i]||'nincs megadva'),'Helyes: '+esc(r.r))).join('');
   }else if(I.t==='ord'){
     a=I.items.map((x,p)=>{const y=I.ans[p]!=null?I.shown[I.ans[p]]:null;return y===x?line('good',p+1+'.',x):line('wrong',p+1+'.',y||'nincs megadva','Helyes: '+esc(x))}).join('');
+  }else if(I.t==='f'){
+    let k=0,prev='';const out=[];I.segs.forEach(x=>{if(typeof x==='string'){prev=x;return}const i=k++;const ctx='…'+prev.trim().split(' ').slice(-5).join(' ');out.push(I.ans[i]===x.c?line('good','✓',ctx+' ['+x.c+']'):line('wrong','✗',ctx+' ['+(I.ans[i]||'nincs megadva')+']','Helyes: '+esc(x.c)))});a=out.join('');
   }else if(I.t==='c'){
     a=I.items.map((it,i)=>I.ans[i]===it.g?line('good','✓',it.x+' → '+I.groups[it.g]):line('wrong','✗',it.x+' → '+(I.ans[i]!=null?I.groups[I.ans[i]]:'nincs megadva'),'Helyes: '+esc(I.groups[it.g]))).join('');
   }
@@ -1163,7 +1350,7 @@ function resultView(){
 
 function statsView(){
   document.body.dataset.subj=statSubj==='all'?'':statSubj;
-  const keys=statSubj==='all'?['ana','bm']:[statSubj];
+  const keys=statSubj==='all'?['ana','bm','agv']:[statSubj];
   const rows=keys.flatMap(k=>STORE.hist[k].map(h=>({...h,k}))).sort((a,b)=>b.d-a.d);
   const n=rows.length, avg=n?Math.round(rows.reduce((s,r)=>s+r.pct,0)/n*10)/10:0, best=n?Math.max(...rows.map(r=>r.pct)):0;
   const totSec=rows.reduce((s,r)=>s+(r.sec||0),0), totQ=rows.reduce((s,r)=>s+r.n,0);
@@ -1186,7 +1373,7 @@ function statsView(){
   return `<div class="wrap">
     <div class="topbar"><button class="back" data-act="home" aria-label="Vissza">←</button><div class="t"><span class="eyebrow">Kitöltések</span><b>Statisztika</b></div></div>
     <div class="stack">
-      <div class="chips">${[['all','Mindkettő'],['ana','Anatómia'],['bm','Betegmegfigyelés']].map(([k,l])=>`<button class="chip" data-act="stsubj" data-s="${k}" aria-pressed="${statSubj===k}">${l}</button>`).join('')}</div>
+      <div class="chips">${[['all','Összes'],['ana','Anatómia'],['bm','Betegmegfigyelés'],['agv','Ágazati vizsga']].map(([k,l])=>`<button class="chip" data-act="stsubj" data-s="${k}" aria-pressed="${statSubj===k}">${l}</button>`).join('')}</div>
       ${n?`
       <div class="tiles">${tile('Kitöltés',n)}${tile('Átlag',avg+'%')}${tile('Legjobb',best+'%')}${tile('Sikeres (≥41%)',pass+' / '+n)}${tile('Megoldott kérdés',totQ)}${tile('Összes idő',Math.floor(totSec/3600)?Math.floor(totSec/3600)+' ó '+Math.round(totSec%3600/60)+' p':Math.round(totSec/60)+' p')}</div>
       ${chart?`<section class="panel"><span class="eyebrow">Eredmények alakulása</span>${chart}</section>`:''}
@@ -1222,7 +1409,7 @@ document.addEventListener('click',ev=>{
     case'resume':view='quiz';render(true);break;
     case'discard':EX=null;saveEx();render();break;
     case'reset':confirmReset=true;render();break;
-    case'reset2':STORE={seen:{ana:[],bm:[]},hist:{ana:[],bm:[]}};persist();confirmReset=false;render();break;
+    case'reset2':STORE={seen:{ana:[],bm:[],agv:[]},hist:{ana:[],bm:[],agv:[]},wrong:{ana:[],bm:[],agv:[]}};persist();confirmReset=false;render();break;
     case'opt':{const i=+b.dataset.i;if(I.t==='s')I.ans=I.ans===i?null:i;else{const k=I.ans.indexOf(i);k>=0?I.ans.splice(k,1):I.ans.push(i)}confirmSubmit=false;saveEx();render();break}
     case'tf':{const v=b.dataset.v==='1';I.ans=I.ans===v?null:v;confirmSubmit=false;saveEx();render();break}
     case'ordadd':I.ans.push(+b.dataset.ix);confirmSubmit=false;saveEx();render();break;
@@ -1242,7 +1429,7 @@ document.addEventListener('click',ev=>{
   }
 });
 document.addEventListener('change',ev=>{
-  const s=ev.target.closest('select[data-act="ma"]');if(!s||!EX)return;
+  const s=ev.target.closest('select[data-act="ma"],select[data-act="fsel"]');if(!s||!EX)return;
   const I=EX.items[EX.cur];I.ans[+s.dataset.i]=s.value;s.classList.toggle('set',!!s.value);confirmSubmit=false;saveEx();
   const p=$('.prog i');if(p)p.style.width=(EX.items.filter(touched).length/EX.items.length*100)+'%';
   const d=document.querySelector(`.dots button[data-i="${EX.cur}"]`);if(d)d.classList.toggle('done',touched(I));
