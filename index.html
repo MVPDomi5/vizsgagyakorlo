@@ -12,7 +12,7 @@
 /* Layout: egyoszlopos, telefonra szabott app; ragadós felső sáv + alsó akciósáv. Anatómia = vér-bordó, Betegmegfigyelés = kórlap-petrol. */
 :root{
   --bg:#eef1f4; --surface:#ffffff; --sunk:#e3e8ed; --ink:#15202b; --muted:#5a6876; --line:#d4dbe2;
-  --ana:#9e2236; --ana-soft:#f6e3e6; --agv:#4f3fa8; --agv-soft:#e8e4f7; --bm:#0d6b72; --bm-soft:#dcf0f1;
+  --ana:#9e2236; --ana-soft:#f6e3e6; --agv:#4f3fa8; --agv-soft:#e8e4f7; --fs:#2e7d32; --fs-soft:#e2f2e3; --bm:#0d6b72; --bm-soft:#dcf0f1;
   --ok:#1b7a4b; --ok-soft:#dff3e8; --bad:#bd3326; --bad-soft:#fbe5e2; --warn:#a86700; --warn-soft:#fbefd9;
   --acc:var(--ink); --acc-soft:var(--sunk);
   --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
@@ -22,15 +22,16 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e1419; --surface:#172029; --sunk:#202b36; --ink:#e7edf2; --muted:#93a2b0; --line:#2b3845;
-  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --bm:#4cc0c6; --bm-soft:#123236;
+  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --fs:#74c97a; --fs-soft:#183320; --bm:#4cc0c6; --bm-soft:#123236;
   --ok:#4ccb8a; --ok-soft:#14301f; --bad:#f2786b; --bad-soft:#3a1c19; --warn:#f0b351; --warn-soft:#352812; color-scheme:dark;}}
 :root[data-theme="dark"]{
   --bg:#0e1419; --surface:#172029; --sunk:#202b36; --ink:#e7edf2; --muted:#93a2b0; --line:#2b3845;
-  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --bm:#4cc0c6; --bm-soft:#123236;
+  --ana:#ec7186; --ana-soft:#3a1d24; --agv:#a99cf0; --agv-soft:#26213f; --fs:#74c97a; --fs-soft:#183320; --bm:#4cc0c6; --bm-soft:#123236;
   --ok:#4ccb8a; --ok-soft:#14301f; --bad:#f2786b; --bad-soft:#3a1c19; --warn:#f0b351; --warn-soft:#352812; color-scheme:dark;}
 body[data-subj="ana"]{--acc:var(--ana);--acc-soft:var(--ana-soft)}
 body[data-subj="bm"]{--acc:var(--bm);--acc-soft:var(--bm-soft)}
 body[data-subj="agv"]{--acc:var(--agv);--acc-soft:var(--agv-soft)}
+body[data-subj="fs"]{--acc:var(--fs);--acc-soft:var(--fs-soft)}
 *{box-sizing:border-box}
 html,body{min-height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
@@ -56,7 +57,7 @@ h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:
 .subj .meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--muted)}
 .subj .meta b{color:var(--ink);font-weight:700}
 .subj svg.trace{position:absolute;right:-6px;top:4px;width:130px;height:48px;opacity:.35;pointer-events:none}
-.subj[data-s="agv"]{--c:var(--agv)} .subj[data-s="ana"]{--c:var(--ana)} .subj[data-s="bm"]{--c:var(--bm)}
+.subj[data-s="agv"]{--c:var(--agv)} .subj[data-s="fs"]{--c:var(--fs)} .subj[data-s="ana"]{--c:var(--ana)} .subj[data-s="bm"]{--c:var(--bm)}
 .subj .go{justify-self:start;margin-top:4px;background:var(--c);color:var(--surface);border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:16px}
 .foot{margin-top:24px;font-size:13.5px;color:var(--muted)}
 .linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:13.5px}
@@ -937,6 +938,83 @@ CX('kat','Csoportosítsa a katasztrófákat hely szerint!',['helyi','térségi',
 O('kat','Tegye helyes sorrendbe a katasztrófák elleni védekezés szakaszait!',['Megelőzés','Védekezés','Helyreállítás'],K),
 ];
 
+// ---------- FERTŐTLENÍTÉS ÉS STERILEZÉS (a „Beteg és dolgozó biztonság – Fertőtlenítés-sterilizálás” diasor alapján) ----------
+const FS=[
+// Fertőtlenítés – fogalmak
+S('fert','Mi a fertőtlenítés (dezinficiálás)?',['azon tevékenységek összessége, amelyek a külső környezetbe kikerült kórokozók elpusztítására, számuk csökkentésére, illetve fertőzőképességük megszüntetésére irányulnak','az eljárás, amellyel a kezelt anyagon minden mikroorganizmust és azok nyugvó formáit is elpusztítjuk','a kórokozók bejutásának megakadályozása a szervezetbe védőoltással','a kéz szappanos megmosása'],'Fertőtlenítés = dezinficiálás. A sterilezés ennél több: minden mikroorganizmust és nyugvó formáikat is elpusztítja.'),
+MA('fert','Párosítsa a fogalmat a meghatározásával!',[['fertőtlenítés (dezinficiálás)','a külső környezetbe kikerült kórokozók elpusztítása, számuk csökkentése, fertőzőképességük megszüntetése'],['aszepszis','munkamódszer, eljárás, mellyel a kontaminációt megelőzzük'],['antiszepszis','eljárás, mellyel a fertőtlenítést végezzük'],['sterilezés','minden mikroorganizmus és azok vegetatív alakjainak elpusztítása a kezelt anyagon']],4,'Aszepszis: megelőzés; antiszepszis: fertőtlenítés; sterilezés: teljes csíramentesítés.'),
+S('fert','Mi az aszepszis?',['munkamódszer, eljárás, mellyel a kontaminációt (szennyeződést) megelőzzük','eljárás, mellyel a fertőtlenítést végezzük','a kórokozók teljes elpusztítása hővel','a bőr fertőtlenítése jódos oldattal'],'Aszepszis: a kontamináció megelőzése.'),
+S('fert','Mi az antiszepszis?',['eljárás, mellyel a fertőtlenítést végezzük','munkamódszer, mellyel a kontaminációt megelőzzük','a sterilezés egyik formája etilén-oxiddal','a steril anyagok tárolása'],'Antiszepszis: a fertőtlenítés végzése.'),
+M('fert','Mi befolyásolja a fertőtlenítő hatást? (Több helyes válasz is van.)',['az alkalmazott módszer','a fertőtlenítendő anyag minősége, szennyezettsége','a mikroorganizmusok száma, virulenciája','a hőmérséklet','a behatási időtartam'],['a fertőtlenítőszer csomagolásának színe','a beteg vércsoportja'],'Mind az öt tényező a diasor szerint.'),
+MA('fert','Párosítsa a fertőtlenítőszer hatáserősségét a jelentésével!',[['sanatios (csíraszámcsökkentő) hatás','csökkenti a kórokozók számát'],['bakteriosztatikus hatás','gátolja a baktériumok szaporodását'],['baktericid hatás','elpusztítja a baktériumokat'],['sporocid hatás','elpusztítja a spórákat'],['virucid hatás','elpusztítja a vírusokat'],['fungicid hatás','elpusztítja a gombákat'],['paraziticid hatás','elpusztítja a parazitákat']],5,'A fertőtlenítőszerek hatáserősségének jellemzői.'),
+M('fert','Melyek a fertőtlenítőszerek hatáserősségének jellemzői? (Több helyes válasz is van.)',['csíraszámcsökkentő (sanatios) hatás','bakteriosztatikus hatás','baktericid hatás','sporocid hatás','virucid hatás','fungicid hatás'],['hipertóniás hatás','antikoaguláns hatás'],'A felsoroltakon kívül a paraziticid hatás is ide tartozik.'),
+S('fert','Mit jelent a „sporocid” hatás?',['a spórákat is elpusztítja','csak a baktériumok szaporodását gátolja','a vírusokat pusztítja el','a gombákat pusztítja el'],'Sporocid = spóraölő.'),
+S('fert','Mi a különbség a bakteriosztatikus és a baktericid hatás között?',['a bakteriosztatikus gátolja a baktériumok szaporodását, a baktericid elpusztítja őket','a bakteriosztatikus vírusokra hat, a baktericid gombákra','a kettő ugyanaz','a baktericid csak a spórákra hat'],'-sztatikus: gátló; -cid: ölő.'),
+// Fizikai módszerek
+C('fert','Melyik csoportba tartozik a fertőtlenítés fizikai módszere?',['Mechanikai','Hőhatás','Sugaras eljárás'],[['tisztítás',0],['szűrés',0],['pasztőrözés',1],['forralás, kifőzés',1],['izzítás',1],['elégetés',1],['napfény',2],['ibolyántúli sugárzás (germicid lámpa)',2]],7,'A fertőtlenítés fizikai módszerei: mechanikai, hőhatás, sugaras eljárások.'),
+C('fert','Fizikai vagy kémiai fertőtlenítő eljárás?',['Fizikai','Kémiai'],[['szűrés',0],['pasztőrözés',0],['forralás, kifőzés',0],['izzítás',0],['ibolyántúli sugárzás (germicid lámpa)',0],['lemosás',1],['letörlés',1],['permetezés',1],['átkefélés',1],['beáztatás',1],['detergens habbal bedörzsölés',1],['elegyítés',1]],8,'Az elégetés mindkét felsorolásban szerepel a diasoron.'),
+S('fert','Mi a germicid lámpa?',['ibolyántúli (UV) sugárzással fertőtlenítő lámpa','infravörös melegítőlámpa','vizsgálólámpa','sterilezésre használt gamma-sugárforrás'],'Sugaras fizikai fertőtlenítés.'),
+M('fert','Melyek a kémiai fertőtlenítő eljárások? (Több helyes válasz is van.)',['lemosás','letörlés','permetezés','átkefélés','beáztatás','elegyítés'],['pasztőrözés','szűrés','izzítás'],'Kémiai eljárás még az elégetés és a detergens habbal bedörzsölés.'),
+// Kémiai szerek
+MA('fert','Párosítsa a fertőtlenítőszer-csoportot a példával!',[['klór és vegyületei','nátrium-hipoklorit, Hypo'],['jód és vegyületei','Betadin, Jodoseptic'],['alkoholok','etanol, izopropanol'],['aldehidek','Virusept, Lysoform, Predentál'],['oxidálószerek','hidrogén-peroxid, Haemosol'],['krezolszármazékok','Arugeen spray'],['felületaktív szerek','Bradosept, Bradosan'],['kombinált szerek','Dodesept, Spitaderm']],5,'A diasor példái alapján.'),
+MA('fert','Párosítsa a fertőtlenítőszer-csoportot a felhasználási területével!',[['klór és vegyületei (pl. Hypo)','padlófelület, csempe fertőtlenítése'],['jód és vegyületei (pl. Betadin)','bőrfertőtlenítés'],['alkoholok (pl. etanol)','eszközök fertőtlenítése'],['aldehidek (pl. Lysoform)','eszközök, bútorok fertőtlenítése'],['oxidálószerek (pl. hidrogén-peroxid)','bőr, nyálkahártya fertőtlenítése'],['kombinált szerek (pl. Spitaderm)','kéz- és bőrfertőtlenítés']],5,'A diasor szerint.'),
+S('fert','Mire használjuk a klórvegyületeket (pl. nátrium-hipoklorit, Hypo)?',['padlófelület, csempe fertőtlenítésére','nyálkahártya fertőtlenítésére','kézfertőtlenítésre műtét előtt','endoszkópok sterilezésére'],'Klór és vegyületei: felületfertőtlenítés.'),
+S('fert','Melyik csoportba tartozik a Betadin és a Jodoseptic?',['jód és vegyületei','alkoholok','aldehidek','klórvegyületek'],'Bőrfertőtlenítésre használjuk.'),
+S('fert','Melyik csoportba tartozik a hidrogén-peroxid és a Haemosol?',['oxidálószerek','aldehidek','alkoholok','krezolszármazékok'],'Bőr, nyálkahártya fertőtlenítésére.'),
+S('fert','Melyik csoportba tartozik a Virusept, a Lysoform és a Predentál?',['aldehidek','jódvegyületek','felületaktív szerek','oxidálószerek'],'Eszközök, bútorok fertőtlenítésére.'),
+S('fert','Melyik fertőtlenítőszer-csoportba tartozik az etanol és az izopropanol?',['alkoholok','aldehidek','klórvegyületek','oxidálószerek'],'Eszközök fertőtlenítésére.'),
+S('fert','Mire használjuk a kombinált szereket (pl. Dodesept, Spitaderm)?',['kéz- és bőrfertőtlenítésre','padló fertőtlenítésére','sterilezésre','textíliák mosására'],'Kombinált szerek: kéz- és bőrfertőtlenítés.'),
+S('fert','Melyik szer felületaktív fertőtlenítőszer?',['Bradosept','Betadin','Lysoform','Hypo'],'Felületaktív szerek: Bradosept, Bradosan – bőrfertőtlenítésre.'),
+// Kézfertőtlenítés
+S('fert','Mi a kézfertőtlenítés célja?',['a kézen lévő mikroorganizmusok számának csökkentése, fertőzőképességük megszüntetése','a kéz sterillé tétele','a bőr hidratálása','a kesztyű helyettesítése'],'A kéz nem tehető sterillé, csak a csíraszám csökkenthető.'),
+M('fert','Melyek a kézfertőtlenítés formái? (Több helyes válasz is van.)',['egyfázisos','kétfázisos','alkoholos kézfertőtlenítés'],['háromfázisos','gőzös kézfertőtlenítés'],'Egyfázisos, kétfázisos, alkoholos.'),
+S('fert','Mi jellemzi az egyfázisos kézfertőtlenítést?',['a fertőtlenítő és a felületaktív szer egyben van: kézmosás, folyóvizes öblítés, szárítás','csak alkoholos bedörzsölés, víz nélkül','előbb szappanos mosás, majd külön fertőtlenítés','sterilezés autoklávban'],'Egyfázisos: fertőtlenítő + felületaktív szer egy lépésben.'),
+O('fert','Állítsa sorrendbe az egyfázisos kézfertőtlenítés lépéseit!',['kézmosás fertőtlenítő-felületaktív szerrel','folyóvizes öblítés','szárítás'],'Egyfázisos kézfertőtlenítés.'),
+// Sterilezés
+S('ster','Mi a sterilezés?',['azon eljárások összessége, amelyekkel a kezelt anyagon minden mikroorganizmust és azok vegetatív alakjait elpusztítjuk','a kórokozók számának csökkentése a kézen','a kontamináció megelőzése','a felületek lemosása fertőtlenítőszerrel'],'Steril az az anyag, amely mentes valamennyi kórokozótól és azok nyugvó formáitól is.'),
+S('ster','Mikor nevezünk egy anyagot sterilnek?',['ha mentes valamennyi kórokozótól és azok nyugvó formáitól is','ha a kórokozók száma csökkent','ha alkohollal letöröltük','ha nincs rajta látható szennyeződés'],'Sterilezés ≠ fertőtlenítés.'),
+TF('ster','A fertőtlenítés és a sterilezés ugyanazt jelenti.',0,'Hamis: a sterilezés minden mikroorganizmust és nyugvó formáikat is elpusztítja, a fertőtlenítés a kórokozók számát csökkenti, fertőzőképességüket szünteti meg.'),
+M('ster','Melyek a főbb sterilező hatások? (Több helyes válasz is van.)',['hőhatás','etilén-oxid','antimikrobiális oldatok','plazmasterilezés','sugárzó energia'],['alkoholos letörlés','szappanos kézmosás'],'A diasor szerinti öt főbb sterilező hatás.'),
+MA('ster','Párosítsa a hővel történő sterilezés formáját a hatásmódjával!',[['nedves hő','kicsapja a mikroorganizmus fehérjéit'],['száraz hő','elégeti, oxidálja a kórokozót']],2,'Nedves hő: autokláv; száraz hő: hőlégsterilizátor.'),
+MA('ster','Melyik készülék melyik hővel sterilez?',[['autokláv','nedves hő (gőz)'],['hőlégsterilizátor','száraz hő']],2,'Autokláv – nedves hő; hőlégsteril – száraz hő.'),
+M('ster','Melyek a hővel történő sterilezés előnyei? (Több helyes válasz is van.)',['megbízható','könnyen szabályozható','ellenőrizhető','olcsó','nem hagy toxikus maradékot'],['hőérzékeny anyagokhoz is jó','nincs szükség csomagolásra'],'Hátránya: hőérzékeny anyagoknál nem használható.'),
+S('ster','Mi a hővel történő sterilezés hátránya?',['hőérzékeny anyagoknál nem használható','drága','toxikus maradékot hagy','nem ellenőrizhető'],'Ezért van szükség gáz-, plazma- vagy oldatos sterilezésre is.'),
+M('ster','Mi sterilezhető hővel? (Több helyes válasz is van.)',['orvosi eszközök, műszerek','textíliák, kötszerek','hőálló gumi- és műanyag eszközök','üveg- és porcelán eszközök'],['endoszkópok','sebvarrófonalak'],'Az endoszkópos eszközöket oldattal, a sebvarrófonalakat etilén-oxiddal sterilezzük.'),
+S('ster','Mit sterilezhetünk kizárólag száraz hővel (a nedves hővel szemben)?',['porokat, finom élű műszereket','textíliákat','kötszereket','gumikesztyűt'],'Száraz hő alkalmazásakor a porok és finom élű műszerek is sterilezhetők.'),
+M('ster','Melyek a csomagolási módok hővel történő sterilezéshez? (Több helyes válasz is van.)',['kötszerdoboz','textília','speciális papír','hőálló üvegedény','fólia'],['nejlonzacskó','kartondoboz'],'Csomagolás hővel történő sterilezéshez.'),
+S('ster','Hogyan helyezzük az eszközöket a csomagolóanyagba hővel történő sterilezéshez?',['szétszedett állapotban, hogy a hő a sterilezendő eszköz minden pontjával érintkezzen','összeszerelve, szorosan egymásra rakva','zárt, légmentes nejlonzacskóba','fertőtlenítőszeres oldatba merítve'],'A hőnek minden ponthoz el kell jutnia.'),
+S('ster','Mi az etilén-oxidos (gáz) sterilezés előnye?',['olyan eszközök is sterilezhetők, amelyeket a magas hő károsítana (gumi- és műanyag eszközök, sebvarrófonalak)','nagyon gyors, azonnal használható az eszköz','teljesen ártalmatlan az emberre','olcsóbb a hőnél'],'Hőérzékeny eszközökhöz.'),
+S('ster','Mi az etilén-oxidos sterilezés hátránya?',['a gáz az emberi sejtekre is mérgező, ezért meg kell várni, amíg teljesen kiszellőzik az eszközből','hőérzékeny eszközöket károsít','csak üveg sterilezhető vele','nem hatol át a csomagoláson'],'A kiszellőzés 96–120 óra.'),
+S('ster','Mennyi ideig kell várni etilén-oxidos sterilezés után, hogy a gáz kiszellőzzön az eszközből?',['96–120 óra','30 perc','3 óra','7 nap'],'A gáz mérgező, ezért hosszú kiszellőztetés szükséges.'),
+M('ster','Mi sterilezhető etilén-oxiddal? (Több helyes válasz is van.)',['gumieszközök','műanyag eszközök','sebvarrófonalak'],['porok','finom élű fémműszerek kizárólag'],'Olyan eszközök, amelyeket a magas hő károsítana.'),
+M('ster','Mi jellemzi a formaldehidgázos sterilezést? (Több helyes válasz is van.)',['formalinoldat + vízgőz','átdiffundál a csomagolóanyagon, de az anyag nem nyeli el','nem károsítja az anyagot, száradás után felhasználható'],['96–120 óra kiszellőztetést igényel','száraz hővel működik'],'Formaldehid gáz: formalin + vízgőz.'),
+S('ster','Mire alkalmas az antimikrobiális oldatokkal történő sterilezés?',['hőérzékeny anyagok sterilezésére (pl. endoszkópos eszközök, fogászati kézi műszerek)','textíliák sterilezésére','porok sterilezésére','padló fertőtlenítésére'],'Pl. Gludesin oldattal.'),
+S('ster','Milyen oldattal végezhető antimikrobiális sterilezés a diasor példája szerint?',['Gludesin','Hypo','Betadin','etanol'],'Széles spektrumú vegyület.'),
+S('ster','Mennyi a behatási idő antimikrobiális oldatos (pl. Gludesin) sterilezésnél?',['3 óra','30 perc','75 perc','96–120 óra'],'Utána alapos leöblítés és szárítás szükséges.'),
+O('ster','Állítsa sorrendbe az antimikrobiális oldatos sterilezés lépéseit!',['behatás az oldatban (3 óra)','alapos leöblítés','szárítás','csomagolás legalább 4 rétegű, sűrű szövésű textíliába'],'Az így sterilezett eszköz maximum 7 napig tárolható.'),
+S('ster','Hogyan csomagoljuk az antimikrobiális oldattal sterilezett eszközt, és meddig tárolható?',['legalább 4 rétegű, sűrű szövésű textíliába; maximum 7 napig','fóliába; 6 hónapig','papírba; 1 napig','nem kell csomagolni; korlátlanul'],'A diasor szerint.'),
+S('ster','Mire alkalmas a sugárzó energiával (ionizáló, gamma-sugárzással) történő sterilezés?',['az egyszer használatos eszközök, műszerek csírátlanítására','a kéz fertőtlenítésére','a padló fertőtlenítésére','a textíliák mosására'],'Nagy áthatolóképességük miatt.'),
+S('ster','Miért alkalmas a gamma-sugárzás sterilezésre?',['nagy áthatolóképessége miatt','mert hőt termel','mert gázt bocsát ki','mert olcsó és otthon is használható'],'Egyszer használatos eszközök sterilezésére.'),
+M('ster','Mi jellemzi a plazmasterilezést? (Több helyes válasz is van.)',['hidrogén-peroxid plazma','főleg hőérzékeny anyagok sterilizálására','időtartama legfeljebb 75 perc'],['etilén-oxid gázzal működik','96–120 óra kiszellőztetést igényel'],'Hidrogén-peroxid plazma, max. 75 perc.'),
+S('ster','Mennyi ideig tart legfeljebb a plazmasterilezés?',['75 perc','3 óra','30 perc','96 óra'],'Hidrogén-peroxid plazma.'),
+C('ster','Melyik sterilezési módra jellemző?',['Hő','Etilén-oxid','Antimikrobiális oldat','Plazma'],[['nedves vagy száraz hő, autokláv',0],['nem hagy toxikus maradékot, olcsó',0],['mérgező gáz, 96–120 óra kiszellőztetés',1],['sebvarrófonalak, gumi- és műanyag eszközök',1],['Gludesin, 3 óra behatás',2],['endoszkópos eszközök, fogászati kézi műszerek',2],['hidrogén-peroxid, max. 75 perc',3]],7,'Hasonlítsa össze a sterilezési módokat!'),
+// Előkészítés, tárolás
+O('elok','Állítsa sorrendbe az eszközök sterilezésre való előkészítésének lépéseit!',['gyűjtés (száraz vagy nedves)','öblítés','előfertőtlenítés','tisztítás','szárítás','csomagolás'],'Gyűjtés → öblítés → előfertőtlenítés → tisztítás → szárítás → csomagolás.'),
+S('elok','Hogyan öblítjük az eszközt használat után?',['hideg folyóvízzel, védőöltözékben, gumikesztyűben','forró vízzel, puszta kézzel','alkohollal, kesztyű nélkül','nem öblítjük, azonnal sterilezzük'],'A szennyeződést fertőzőnek kell tekinteni.'),
+TF('elok','Az eszközök használat utáni öblítése csak védőöltözékben, gumikesztyűben végezhető.',1,'Igaz: az eszközön lévő szennyezést fertőzőnek kell tekinteni.'),
+S('elok','Mennyi ideig áztatjuk az eszközt fertőtlenítő oldatban előfertőtlenítéskor?',['legalább 30 percig','legalább 3 percig','legalább 3 óráig','96–120 óráig'],'Pl. Lysoform, Spovirid, Dodarcana oldatban, a csíraszám csökkentésére.'),
+S('elok','Mi az előfertőtlenítés célja?',['a csíraszám csökkentése','az eszköz sterillé tétele','a csomagolás','a szárítás'],'Utána langyos csapvízzel leöblítjük a fertőtlenítőszer-maradékot.'),
+S('elok','Mivel öblítjük le a fertőtlenítőszer maradékát az előfertőtlenítés után?',['langyos csapvízzel','alkohollal','forró gőzzel','nem kell leöblíteni'],'A behatási idő letelte után.'),
+S('elok','Mivel végezhetjük az eszközök tisztítását (a még meglévő szennyeződés eltávolítását)?',['mechanikus tisztítással és áztatással, pl. Haemosolos oldattal','Hypos áztatással','gamma-sugárzással','etilén-oxiddal'],'Tisztítás: mechanikus + áztatás.'),
+M('elok','Mit kell feltüntetni a steril eszközön? (Több helyes válasz is van.)',['„steril” feliratot','a sterilezés idejét','a lejárat idejét','a sterilezésért felelős személy névjelét'],['a beteg nevét','a fertőtlenítőszer árát'],'A steril anyagok utókezelése.'),
+M('elok','Hogyan tároljuk a steril anyagokat? (Több helyes válasz is van.)',['bontatlan csomagolásban','lefertőtlenített felületen','portól védve','időnként ellenőrizzük a szavatossági időt és a csomagolás épségét'],['kibontva, hogy lássuk a tartalmát','a beteg ágya alatt'],'A diasor szerint.'),
+TF('elok','A steril anyagok szavatossági idejét és a csomagolás épségét időnként ellenőrizni kell.',1,'Igaz.'),
+// Az ápoló védelme
+S('elok','Hogyan kell tekinteni a betegeket a fertőzésvédelem szempontjából?',['minden beteget potenciálisan fertőzőnek kell tekinteni','csak a lázas betegeket','csak a fertőző osztályon fekvőket','csak azokat, akiknek igazolt fertőzésük van'],'Ezért maximálisan be kell tartani az aszepszis és antiszepszis szabályait.'),
+M('elok','Milyen lehetőségeink vannak a fertőzések megelőzésére ápolóként? (Több helyes válasz is van.)',['aktív, passzív védőoltás','a higiénés szabályok maximális betartása','a védőfelszerelések megfelelő használata'],['antibiotikum szedése megelőzésképpen minden műszakban','a betegek kerülése'],'A diasor szerint a primer prevenciónak van létjogosultsága.'),
+S('elok','A diasor szerint a fertőzések megelőzésében melyik prevenciónak van létjogosultsága?',['a primer prevenciónak','csak a szekunder prevenciónak','csak a tercier prevenciónak','egyiknek sem'],'Primer prevenció: védőoltás, higiénés szabályok, védőfelszerelés.'),
+];
+
 // ---------- HALLGATÁS: felolvasható tananyag ----------
 const LESSONS=[
 {id:'ana-ker',subj:'ana',tp:'ker',title:'Keringési rendszer és a vér',sections:[
@@ -1099,6 +1177,8 @@ const SUBJ={
     topics:{mozg:'Bevezetés és mozgásrendszer',ker:'Keringési rendszer és a vér'}},
   bm:{name:'Betegmegfigyelés',short:'Betegmegfigyelés',bank:BM,desc:'Tünetek, vizsgálómódszerek, életjelek, fájdalom, széklet és vizelet',
     topics:{alap:'Alapok, vizsgálómódszerek',elet:'Életjelek',fajd:'Fájdalom',urit:'Széklet és vizelet'}},
+  fs:{name:'Fertőtlenítés és sterilezés',short:'Fertőtlenítés',bank:FS,desc:'Beteg- és dolgozóbiztonság: fertőtlenítés, sterilezés, eszközök előkészítése',
+    topics:{fert:'Fertőtlenítés',ster:'Sterilezés',elok:'Előkészítés, tárolás, védelem'}},
   agv:{name:'Betegmegfigyelés és vitális paraméterek',short:'Ágazati vizsga',bank:AGV,group:'agv',desc:'OKFŐ ágazati alapvizsga – központi feladatbank, megoldókulccsal',
     topics:{alap:'Alapok, tünetek, testalkat',fajd:'Fájdalom, tudatállapot',valad:'Testváladékok',test:'Időskor, testméretek',vital:'Vitális paraméterek',fert:'Fertőtlenítés',elso:'Elsősegély',kat:'Katasztrófa'}}
 };
@@ -1115,7 +1195,7 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
 function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 let STORE=load('vg-store',{seen:{ana:[],bm:[]},hist:{ana:[],bm:[]}});
-STORE.seen=STORE.seen||{};STORE.hist=STORE.hist||{};STORE.wrong=STORE.wrong||{};for(const k of ['ana','bm','agv']){STORE.seen[k]=STORE.seen[k]||[];STORE.hist[k]=STORE.hist[k]||[];STORE.wrong[k]=STORE.wrong[k]||[]}
+STORE.seen=STORE.seen||{};STORE.hist=STORE.hist||{};STORE.wrong=STORE.wrong||{};for(const k of ['ana','bm','fs','agv']){STORE.seen[k]=STORE.seen[k]||[];STORE.hist[k]=STORE.hist[k]||[];STORE.wrong[k]=STORE.wrong[k]||[]}
 const persist=()=>save('vg-store',STORE);
 const gradeOf=p=>GRADES.find(g=>p>=g[0])[1];
 const fmtTime=s=>{const m=Math.floor(s/60),r=s%60;return m+':'+String(r).padStart(2,'0')};
@@ -1205,6 +1285,7 @@ function submitExam(){
 // ---------- nézetek ----------
 const ecg='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M0 36h40l6-10 6 10h10l5 -30 7 46 6-22h18l5-6 6 6h41"/></svg>';
 const cross='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M66 6h18v16h16v18H84v16H66V40H50V22h16z"/></svg>';
+const drop='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M75 4c10 14 18 24 18 33a18 18 0 0 1-36 0c0-9 8-19 18-33z"/><path d="M68 40a8 8 0 0 0 8 7"/></svg>';
 const bone='<svg class="trace" viewBox="0 0 150 56" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--c)"><path d="M30 20c-8-10-24-2-16 8-8 10 8 18 16 8h90c8 10 24 2 16-8 8-10-8-18-16-8z"/></svg>';
 
 function homeView(){
@@ -1213,7 +1294,7 @@ function homeView(){
     const S=SUBJ[k],h=STORE.hist[k],last=h[0],best=h.length?Math.max(...h.map(x=>x.pct)):null;
     const unseen=S.bank.length-new Set(STORE.seen[k]).size;
     return `<button class="subj" data-s="${k}" data-act="open" data-k="${k}">
-      ${k==='ana'?bone:k==='agv'?cross:ecg}
+      ${k==='ana'?bone:k==='agv'?cross:k==='fs'?drop:ecg}
       <span class="tag"><span class="dot"></span><span class="eyebrow">${S.group?'Ágazati alapvizsga · OKFŐ':'Tantárgy'}</span></span>
       <h2>${S.name}</h2>
       <p class="desc">${S.desc}</p>
@@ -1222,9 +1303,9 @@ function homeView(){
     </button>`};
   const resume=EX&&!EX.done?`<div class="panel" style="margin-top:16px"><div><span class="eyebrow">Félbehagyott vizsga</span><div style="font-weight:700;margin-top:2px">${SUBJ[EX.subj].name} · ${EX.items.filter(touched).length}/${EX.items.length} megválaszolva</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pri" data-act="resume" style="background:var(--${EX.subj});border-color:var(--${EX.subj})">Folytatás</button><button class="btn ghost" data-act="discard">Elvetés</button></div></div>`:'';
   return `<div class="wrap">
-    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><div class="chips" style="margin-top:8px"><button class="chip" data-act="stats">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length+STORE.hist.agv.length} kitöltés</button><button class="chip" data-act="listen">🎧 Hallgatás</button></div></header>
+    <header class="hero"><span class="eyebrow">Ápolói vizsgafelkészítő</span><h1>Ápolási Vizsgagyakorló</h1><p>Minden indításkor új kérdéssor, a végén javítólap a helyes megoldásokkal és jeggyel.</p><div class="chips" style="margin-top:8px"><button class="chip" data-act="stats">Statisztika · ${STORE.hist.ana.length+STORE.hist.bm.length+STORE.hist.fs.length+STORE.hist.agv.length} kitöltés</button><button class="chip" data-act="listen">🎧 Hallgatás</button></div></header>
     ${resume}
-    <div class="subjects">${card('ana')}${card('bm')}</div>
+    <div class="subjects">${card('ana')}${card('bm')}${card('fs')}</div>
     <h2 class="sect">Ágazati vizsga</h2>
     <div class="subjects" style="margin-top:10px">${card('agv')}</div>
     <p class="foot">Az eredményeid és a már látott kérdések csak ezen az eszközön tárolódnak. ${confirmReset?`<button class="linkbtn" data-act="reset2" style="color:var(--bad)">Biztosan törlöd? Koppints újra.</button>`:`<button class="linkbtn" data-act="reset">Statisztika törlése</button>`}</p>
@@ -1350,7 +1431,7 @@ function resultView(){
 
 function statsView(){
   document.body.dataset.subj=statSubj==='all'?'':statSubj;
-  const keys=statSubj==='all'?['ana','bm','agv']:[statSubj];
+  const keys=statSubj==='all'?['ana','bm','fs','agv']:[statSubj];
   const rows=keys.flatMap(k=>STORE.hist[k].map(h=>({...h,k}))).sort((a,b)=>b.d-a.d);
   const n=rows.length, avg=n?Math.round(rows.reduce((s,r)=>s+r.pct,0)/n*10)/10:0, best=n?Math.max(...rows.map(r=>r.pct)):0;
   const totSec=rows.reduce((s,r)=>s+(r.sec||0),0), totQ=rows.reduce((s,r)=>s+r.n,0);
@@ -1373,7 +1454,7 @@ function statsView(){
   return `<div class="wrap">
     <div class="topbar"><button class="back" data-act="home" aria-label="Vissza">←</button><div class="t"><span class="eyebrow">Kitöltések</span><b>Statisztika</b></div></div>
     <div class="stack">
-      <div class="chips">${[['all','Összes'],['ana','Anatómia'],['bm','Betegmegfigyelés'],['agv','Ágazati vizsga']].map(([k,l])=>`<button class="chip" data-act="stsubj" data-s="${k}" aria-pressed="${statSubj===k}">${l}</button>`).join('')}</div>
+      <div class="chips">${[['all','Összes'],['ana','Anatómia'],['bm','Betegmegfigyelés'],['fs','Fertőtlenítés'],['agv','Ágazati vizsga']].map(([k,l])=>`<button class="chip" data-act="stsubj" data-s="${k}" aria-pressed="${statSubj===k}">${l}</button>`).join('')}</div>
       ${n?`
       <div class="tiles">${tile('Kitöltés',n)}${tile('Átlag',avg+'%')}${tile('Legjobb',best+'%')}${tile('Sikeres (≥41%)',pass+' / '+n)}${tile('Megoldott kérdés',totQ)}${tile('Összes idő',Math.floor(totSec/3600)?Math.floor(totSec/3600)+' ó '+Math.round(totSec%3600/60)+' p':Math.round(totSec/60)+' p')}</div>
       ${chart?`<section class="panel"><span class="eyebrow">Eredmények alakulása</span>${chart}</section>`:''}
@@ -1409,7 +1490,7 @@ document.addEventListener('click',ev=>{
     case'resume':view='quiz';render(true);break;
     case'discard':EX=null;saveEx();render();break;
     case'reset':confirmReset=true;render();break;
-    case'reset2':STORE={seen:{ana:[],bm:[],agv:[]},hist:{ana:[],bm:[],agv:[]},wrong:{ana:[],bm:[],agv:[]}};persist();confirmReset=false;render();break;
+    case'reset2':STORE={seen:{ana:[],bm:[],fs:[],agv:[]},hist:{ana:[],bm:[],fs:[],agv:[]},wrong:{ana:[],bm:[],fs:[],agv:[]}};persist();confirmReset=false;render();break;
     case'opt':{const i=+b.dataset.i;if(I.t==='s')I.ans=I.ans===i?null:i;else{const k=I.ans.indexOf(i);k>=0?I.ans.splice(k,1):I.ans.push(i)}confirmSubmit=false;saveEx();render();break}
     case'tf':{const v=b.dataset.v==='1';I.ans=I.ans===v?null:v;confirmSubmit=false;saveEx();render();break}
     case'ordadd':I.ans.push(+b.dataset.ix);confirmSubmit=false;saveEx();render();break;
